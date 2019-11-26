@@ -39,7 +39,7 @@
           <el-menu-item index="/index/政企概览/network">政企概览</el-menu-item>
           <el-menu-item index="/index/专线/network">专线</el-menu-item>
           <el-menu-item index="/index/校园/network">校园</el-menu-item>
-          <el-menu-item index="/index/DICI/network">DICI</el-menu-item>
+          <el-menu-item index="/index/DICI/network">DICT</el-menu-item>
         </el-submenu>
          <el-submenu index="接入网">
           <template slot="title">
