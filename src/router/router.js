@@ -31,8 +31,8 @@ export default new Router({
             isKeepAlive: false,
         },
     },{
-        path: '/sf/:id',
-        name: 'index',
+        path: '/shifen/:id',
+        name: 'shifen',
         component: () => import('../views/shifen.vue'),
         meta: {
             title: '中国电信河南公司投资收益评估系统',
@@ -67,14 +67,33 @@ export default new Router({
         },
     },
     {
-        path: '/xm/:id/school',
+        path: '/xm/:id/school/:xm',
         name: 'school',
         component: () => import('../views/school.vue'),
         meta: {
             title: '中国电信河南公司投资收益评估系统',
             isKeepAlive: false,
         },
-    }], 
+    },
+    {
+        path: '/xm/:id/sf/:xm',
+        name: 'shifenXM',
+        component: () => import('../views/shifenXM.vue'),
+        meta: {
+            title: '中国电信河南公司投资收益评估系统',
+            isKeepAlive: false,
+        },
+    },
+    {
+        path: '/sf/:id',
+        name: 'shifenXM',
+        component: () => import('../views/shifenXM.vue'),
+        meta: {
+            title: '中国电信河南公司投资收益评估系统',
+            isKeepAlive: false,
+        },
+    }
+], 
 });
 // , {
 //     path: '/page1',

@@ -8,7 +8,8 @@ import createPersiste from 'vue-savedata'
 Vue.use(Vuex);
 export default new Vuex.Store({
     state:{
-        date:'2019'
+        date:'2019',
+        menu:'首页'
     },
     modules: {
         mutations,
@@ -18,6 +19,10 @@ export default new Vuex.Store({
         changeDate (state,date) {
             console.log(date)
             state.date = date
+        },
+        changeMenu (state,menu) {
+            console.log(menu)
+            state.menu = menu
         }
     },
     plugins: [createPersiste()],

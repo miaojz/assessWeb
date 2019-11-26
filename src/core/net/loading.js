@@ -1,17 +1,33 @@
-// import {Toast} from 'vant';
+import { Loading } from 'element-ui';
 
-// const openLoading = (msg) => {
-//     Toast.loading({
-//         mask: true,
-//         message: msg ? msg : '加载中...',
-//         duration: 0,
-//     });
-// };
-// const clearLoading = () => {
-//     Toast.clear();
-// };
+let loadingCount = 0;
+let loading;
 
-// export default {
-//     openLoading,
-//     clearLoading
-// };
+const startLoading = () => {
+  loading = Loading.service({
+    lock: true,
+    text: '加载中……',
+    background: 'rgba(0, 0, 0, 0.7)'
+  });
+};
+
+const endLoading = () => {
+  loading.close();
+};
+
+export const showLoading = () => {
+  if (loadingCount === 0) {
+    startLoading();
+  }
+  loadingCount += 1;
+};
+
+export const hideLoading = () => {
+  if (loadingCount <= 0) {
+    return;
+  }
+  loadingCount -= 1;
+  if (loadingCount === 0) {
+    endLoading();
+  }
+};

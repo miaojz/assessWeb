@@ -41,7 +41,7 @@ export default {
 
 <style lang="less" >
 .contain {
-  width: 98%;
+  width: 99%;
   height: 91%;
   margin: 0 10px;
   box-sizing: border-box;

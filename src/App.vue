@@ -9,8 +9,8 @@
             <div class='el-b' v-if='show' :to="{ path: '/' }">首页</div>
             <el-breadcrumb separator="/" v-else>
               <el-breadcrumb-item :to="{ path: '/' }" >首页</el-breadcrumb-item>
-              <el-breadcrumb-item v-if='second' :to="{path:'/index/'+page}">{{page}}</el-breadcrumb-item>
-              <el-breadcrumb-item v-else :to="{path:'/empty'}">{{page}}</el-breadcrumb-item>
+              <el-breadcrumb-item v-if='second' :to="{path:'/index/'+page}">{{second}}</el-breadcrumb-item>
+              <el-breadcrumb-item v-else :to="{path:'/empty'}">{{second}}</el-breadcrumb-item>
               <el-breadcrumb-item v-if="xm" :to="{path:'/empty'}">{{xm}}</el-breadcrumb-item>
             </el-breadcrumb>
             <div class='mainRight'>
@@ -50,7 +50,7 @@ export default {
       show:false,
       options: county,
       xm:'',
-      second:false,
+      second:'',
        selectData: [{
           value: '2015',
           label: '2015'
@@ -67,7 +67,7 @@ export default {
           value: '2019',
           label: '2019'
         }],
-        value: ''
+        value: '',
     }
   },
   components: {
@@ -75,12 +75,36 @@ export default {
     Menu:Menu
   },
   methods:{
-     change(){
+     change(data){
+       var len=data.length-1
+      //  if(data[len].indexOf('school')!=-1){//含有school
+      //      this.to('/xm/school')
+      //    }else if(data[len].indexOf('sf')!=-1){//含有室分物业点项目
+      //      this.to('/'+data[len])
+      //    }
+       var arr=['无线网概览','室分','宏站','专线','校园','CICT','政企概览','接入网概览','家庭宽带']
        if(this.$route.path=='/'){
-          this.to('/xm/school')
+          if(data[len].indexOf('school')!=-1){//含有school
+           this.to('/xm/school')
+         }else if(data[len].indexOf('sf')!=-1){//含有室分物业点项目
+           this.to('/'+data[len])
+         }
        }else{
-         console.log(0)
-         this.to('/xm/'+this.page+'/school')
+         if(data[len].indexOf('school')!=-1){//含有school
+           //this.to('/xm/'+this.page)
+           if(arr.indexOf(this.page)==-1){//不含
+                  this.to('/xm/school')
+              }else{
+                  this.to('/xm/'+this.page+'/school/校园项目')
+              }
+         }else if(data[len].indexOf('sf')!=-1){//含有室分物业点项目
+              if(arr.indexOf(this.page)==-1){//不含
+                  this.to('/'+data[len])
+              }else{
+                  this.to('/xm/'+this.page+'/'+data[len])
+              }
+         }
+         
        }
      },
     to(e) {
@@ -93,36 +117,31 @@ export default {
     },
     selectchange(value){
       this.$store.dispatch('changeDate',value)
-    }
+    },
   },
    watch:{
       //监听路由变化，自动缩减左边菜单栏目
       $route(to,form){
         this.page=this.$route.params.id;
+        this.xm='';
+        this.second=this.page
+        console.log(this.$route)
+        if(this.$route.params.xm)this.xm=this.$route.params.xm
          if(this.$route.path=='/'){
           this.page='首页';
           this.show=true;
         }else{
-          console.log(this.$route)
            this.show=false;
-           if(this.$route.path=='/xm/school'){
-              this.page='项目详情';
+           if(this.$route.name=='index'){
              this.xm='';
-             this.second=false;
-           }else if(this.$route.name=='index'){
-             this.xm='';
-             this.second=false;
-           }else{
-             this.xm='项目详情';
-             this.second=true;
            }
         }
       }
     },
     mounted(){
-      this.$post('/api/index/line',{}).then(res=>{
-        console.log(res)
-      })
+      // this.$post('/api/index/line',{}).then(res=>{
+      //   console.log(res)
+      // })
       // api1({}).then(res => {
       //   // success
       //   console.log(res)

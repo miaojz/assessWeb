@@ -2,7 +2,7 @@
   <div class="contain">
     <el-row :gutter="20">
       <el-col :span="14"><Left></Left></el-col>
-      <el-col :span="10"></el-col>
+      <el-col :span="10"><Right></Right></el-col>
     </el-row>
   </div>
 </template>
@@ -10,12 +10,12 @@
 <script>
 import Vue from 'vue'
 import Left from '../components/sfLeft'
-import Right from '../components/right'
+import Right from '../components/sfRight'
 export default {
   name: 'shifen',
   components: {
     Left: Left,
-    //Right: Right
+    Right: Right
   },
   data() {
     return {
@@ -47,7 +47,7 @@ export default {
 
 <style lang="less" >
 .contain{
-     width: 98%;
+     width: 99%;
     height: 91%;
     margin:0 10px;
   box-sizing: border-box;
