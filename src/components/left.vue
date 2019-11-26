@@ -96,7 +96,7 @@ export default {
         "驻马店市": [114.048353, 32.963372],
         "信阳市": [114.963906, 32.215873]
       };
-      var mapName = 'henan';
+      var mapName = '河南';
       // 最大值 4
       var max = Math.max.apply(Math, data.map(item => { return item.value })) + 20
 
