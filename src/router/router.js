@@ -17,32 +17,93 @@ export default new Router({
     routes: [{
         path: '/',
         name: 'first',
-        component: () => import('../views/index.vue'),
-        meta: {
-            title: '中国电信河南公司投资收益评估系统',
-            isKeepAlive: false,
-        },
-    },{
-        path: '/index/:id/:type',
-        name: 'index',
-        component: () => import('../views/index.vue'),
-        meta: {
-            title: '中国电信河南公司投资收益评估系统',
-            isKeepAlive: false,
-        },
-    },{
-        path: '/shifen/:id',
-        name: 'shifen',
-        component: () => import('../views/shifen.vue'),
+        redirect: '/index',
+        component: () => import('../views/home.vue'),
         meta: {
             title: '中国电信河南公司投资收益评估系统',
             isKeepAlive: false,
         },
     },
     {
-        path: '/xm/:id',
-        name: 'school',
-        component: () => import('../views/school.vue'),
+        path: '/index',
+        name: '首页',
+        component: () => import('../views/home.vue'),
+        meta: {
+            title: '中国电信河南公司投资收益评估系统',
+            isKeepAlive: false,
+        },
+        children: [
+            {
+                path: '/',
+                name: '首页',
+                component: () => import('../views/index.vue'),
+            },
+            {
+                path: '无线网概览',
+                name: '无线网概览',
+                component: () => import('../views/index.vue'),
+            },
+            {
+                path: 'shifen',
+                name: '室分',
+                component: () => import('../views/shifen.vue'),
+            },
+            {
+                path: '宏站',
+                name: '宏站',
+                component: () => import('../views/index.vue'),
+            },
+            {
+                path: '政企概览',
+                name: '政企概览',
+                component: () => import('../views/index.vue'),
+            },
+            {
+                path: '专线',
+                name: '专线',
+                component: () => import('../views/index.vue'),
+            },
+            {
+                path: 'school',
+                name: '校园',
+                component: () => import('../views/index.vue'),
+            },
+            {
+                path: 'DICT',
+                name: 'DICT',
+                component: () => import('../views/index.vue'),
+            },
+            {
+                path: '接入网概览',
+                name: '接入网概览',
+                component: () => import('../views/index.vue'),
+            },
+            {
+                path: '家庭宽带',
+                name: '家庭宽带',
+                component: () => import('../views/index.vue'),
+            },
+            {
+                path: 'school/:id',
+                name: '校园项目',
+                component: () => import('../views/school.vue'),
+            },
+            {
+                path: 'jm/:id',
+                name: '居民区',
+                component: () => import('../views/resident.vue'),
+            },
+            {
+                path: 'sf/:id',
+                name: '室分项目',
+                component: () => import('../views/shifenXM.vue'),
+            },
+        ],
+    },
+    {
+        path: '/shifen/:id',
+        name: 'shifen',
+        component: () => import('../views/shifen.vue'),
         meta: {
             title: '中国电信河南公司投资收益评估系统',
             isKeepAlive: false,
@@ -56,123 +117,60 @@ export default new Router({
             title: '中国电信河南公司投资收益评估系统',
             isKeepAlive: false,
         },
-    },
+     },
     {
-        path: '/index1',
-        name: 'index1',
-        component: () => import('../views/home.vue'),
-        meta: {
-            title: '中国电信河南公司投资收益评估系统',
-            isKeepAlive: false,
-        },
-    },
-    {
-        path: '/xm/:id/school/:xm',
-        name: 'school',
+        path: '/school',
+        name: '校园项目',
         component: () => import('../views/school.vue'),
         meta: {
             title: '中国电信河南公司投资收益评估系统',
             isKeepAlive: false,
         },
     },
-    {
-        path: '/xm/:id/sf/:xm',
-        name: 'shifenXM',
-        component: () => import('../views/shifenXM.vue'),
-        meta: {
-            title: '中国电信河南公司投资收益评估系统',
-            isKeepAlive: false,
-        },
-    },
-    {
-        path: '/sf/:id',
-        name: 'shifenXM',
-        component: () => import('../views/shifenXM.vue'),
-        meta: {
-            title: '中国电信河南公司投资收益评估系统',
-            isKeepAlive: false,
-        },
-    }
+    // {
+    //     path: '/xm/:id/sf/:xm',
+    //     name: 'shifenxm',
+    //     component: () => import('../views/shifenXM.vue'),
+    //     meta: {
+    //         title: '中国电信河南公司投资收益评估系统',
+    //         isKeepAlive: false,
+    //     },
+    // },
+    // {
+    //     path: '/sf/:id',
+    //     name: 'shifenXM',
+    //     component: () => import('../views/shifenXM.vue'),
+    //     meta: {
+    //         title: '中国电信河南公司投资收益评估系统',
+    //         isKeepAlive: false,
+    //     },
+    // },{
+    //     path: '/jm/:id',
+    //     name: 'jm',
+    //     component: () => import('../views/resident.vue'),
+    //     meta: {
+    //         title: '中国电信河南公司投资收益评估系统',
+    //         isKeepAlive: false,
+    //     },
+    // },
+    // {
+    //     path: '/xm/:id/jm/:xm',
+    //     name: 'shifenxm',
+    //     component: () => import('../views/resident.vue'),
+    //     meta: {
+    //         title: '中国电信河南公司投资收益评估系统',
+    //         isKeepAlive: false,
+    //     },
+    // },
+        // {
+    //     path: '/xm/:id/school/:xm',
+    //     name: 'schoolxm',
+    //     component: () => import('../views/school.vue'),
+    //     meta: {
+    //         title: '中国电信河南公司投资收益评估系统',
+    //         isKeepAlive: false,
+    //     },
+    // },
+    {path: '*',redirect: '/'}
 ], 
 });
-// , {
-//     path: '/page1',
-//     name: 'page1',
-//     component: () => import('../views/page1.vue'),
-//     meta: {
-//         title: 'support',
-//         isKeepAlive: false,
-//     },
-// }, {
-//     path: '/page2',
-//     name: 'page2',
-//     component: () => import('../views/page2.vue'),
-//     meta: {
-//         title: 'support',
-//         isKeepAlive: false,
-//     },
-// }, {
-//     path: '/page3',
-//     name: 'page3',
-//     component: () => import('../views/page3.vue'),
-//     meta: {
-//         title: 'support',
-//         isKeepAlive: false,
-//     },
-// }, {
-//     path: '/page4',
-//     name: 'page4',
-//     component: () => import('../views/page4.vue'),
-//     meta: {
-//         title: 'support',
-//         isKeepAlive: false,
-//     },
-// }, {
-//     path: '/empty',
-//     name: 'empty',
-//     component: () => import('../views/empty.vue'),
-//     meta: {
-//         title: 'support',
-//         isKeepAlive: false,
-//     },
-// }, {
-//     path: '/product',
-//     name: 'product',
-//     component: () => import('../views/product.vue'),
-//     meta: {
-//         title: 'support',
-//         isKeepAlive: false,
-//     },
-// }, {
-//     path: '/detail',
-//     name: 'detail',
-//     component: () => import('../views/product_detail.vue'),
-//     meta: {
-//         title: 'support',
-//         isKeepAlive: false,
-//     },
-// }, {
-//     path: '/login',
-//     name: 'login',
-//     component: () => import('../views/login.vue'),
-//     meta: {
-//         title: 'support',
-//         isKeepAlive: false,
-//     },
-// }, {
-//     path: '/sign',
-//     name: 'sign',
-//     component: () => import('../views/signup.vue'),
-//     meta: {
-//         title: 'support',
-//         isKeepAlive: false,
-//     },
-// }, {
-//     path: '**',
-//     name: '404',
-//     component: () => import('../views/home.vue'),
-//     meta: {
-//         title: 'support',
-//         isKeepAlive: false,
-//     },
-// }

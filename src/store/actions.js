@@ -9,7 +9,4 @@ export default {
     changeDate (ctx,date) {
         ctx.commit('changeDate',date)
     },
-    changeMenu (ctx,menu) {
-        ctx.commit('changeMenu',menu)
-    }
 };

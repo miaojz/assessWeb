@@ -1,6 +1,6 @@
 <template>
-  <div class="height school">
-    <div class="leftTop flexbox">
+  <div class="height">
+    <div class="leftTop flexbox school">
       <el-card class="box-card height">
         <div class="height rightcon">
           <div class="flexbox boxd">
@@ -148,10 +148,16 @@ export default {
   },
   methods: {
     drawLine() {
-       var option = this.$commonJS.sfChartLine();
+      var obj = {
+        xdata: ['电信用户', '高价值用户', '投诉用户'],
+        data0: [300, 500, 909, 600, 1030, 800, 550, 1020, 1050],
+        data1: [100, 200, 409, 300, 430, 200, 350, 420, 450],
+        data2: [50, 105, 200, 132, 220, 80, 120, 220, 190],
+      }
+      var option = this.$commonJS.sfChartLine(obj);
       var myChart = this.$echarts.init(document.getElementById('line'));//获取容器元素
       var dom = document.getElementById('line')
-      myChart.setOption(option,true);
+      myChart.setOption(option, true);
       let lestener = function () {
         myChart.resize()
       }
@@ -251,8 +257,8 @@ export default {
   padding: 20px 0;
   box-sizing: border-box;
 }
-#line{
+#line {
   width: 100%;
-  height: 100%
+  height: 100%;
 }
 </style>

@@ -1,6 +1,5 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-
 import actions from './actions';
 import mutations from './mutations';
 import createPersiste from 'vue-savedata'
@@ -9,7 +8,8 @@ Vue.use(Vuex);
 export default new Vuex.Store({
     state:{
         date:'2019',
-        menu:'首页'
+
+        breadcrumbData:[]
     },
     modules: {
         mutations,
@@ -20,9 +20,8 @@ export default new Vuex.Store({
             console.log(date)
             state.date = date
         },
-        changeMenu (state,menu) {
-            console.log(menu)
-            state.menu = menu
+        changeBreadcrumb(state,item){
+            state.breadcrumbData=item
         }
     },
     plugins: [createPersiste()],

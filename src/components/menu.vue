@@ -22,7 +22,7 @@
             <i class="el-icon-location"></i>
             <span>投资收益评估</span>
           </template>
-          <el-menu-item index="/">
+          <el-menu-item index="/index">
             <i class="el-icon-s-promotion"></i>
             <span slot="title">投资收益评估概览</span>
           </el-menu-item>
@@ -31,27 +31,27 @@
               <i class="el-icon-s-promotion"></i>
               <span>无线网</span>
             </template>
-            <el-menu-item index="/index/无线网概览/network">无线网概览</el-menu-item>
-            <el-menu-item index="/index/宏站/network">宏站</el-menu-item>
-            <el-menu-item index="/shifen/室分">室分</el-menu-item>
+            <el-menu-item index="/index/无线网概览">无线网概览</el-menu-item>
+            <el-menu-item index="/index/宏站">宏站</el-menu-item>
+            <el-menu-item index="/index/shifen">室分</el-menu-item>
           </el-submenu>
           <el-submenu index="政企">
             <template slot="title">
               <i class="el-icon-s-promotion"></i>
               <span>政企</span>
             </template>
-            <el-menu-item index="/index/政企概览/network">政企概览</el-menu-item>
-            <el-menu-item index="/index/专线/network">专线</el-menu-item>
-            <el-menu-item index="/index/校园/network">校园</el-menu-item>
-            <el-menu-item index="/index/DICI/network">DICT</el-menu-item>
+            <el-menu-item index="/index/政企概览">政企概览</el-menu-item>
+            <el-menu-item index="/index/专线">专线</el-menu-item>
+            <el-menu-item index="/index/school">校园</el-menu-item>
+            <el-menu-item index="/index/DICT">DICT</el-menu-item>
           </el-submenu>
           <el-submenu index="接入网">
             <template slot="title">
               <i class="el-icon-s-promotion"></i>
               <span>接入网</span>
             </template>
-            <el-menu-item index="/index/接入网概览/network">接入网概览</el-menu-item>
-            <el-menu-item index="/index/家庭宽带/network">家庭宽带</el-menu-item>
+            <el-menu-item index="/index/接入网概览">接入网概览</el-menu-item>
+            <el-menu-item index="/index/家庭宽带">家庭宽带</el-menu-item>
           </el-submenu>
         </el-submenu>
       </el-menu>
@@ -75,11 +75,11 @@ export default {
       console.log(key, keyPath)
       this.$store.dispatch('changeMenu',key)
       if (key == '无线网') {
-        this.to('/index/无线网概览/network')
+        this.to('/index/无线网概览')
       } else if (key == '政企') {
-        this.to('/index/政企概览/network')
+        this.to('/index/政企概览')
       } else if (key == '接入网') {
-        this.to('/index/接入网概览/network')
+        this.to('/index/接入网概览')
       }
     },
     handleClose(key, keyPath) {

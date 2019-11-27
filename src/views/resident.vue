@@ -37,8 +37,21 @@
         <el-col :span="24">
           <el-row :gutter="20">
             <el-col :span="12">
-              <el-card class="box-card height">
-                <div id="rate" class="height"></div>
+              <el-card class="box-card height" style="position:relative">
+                <el-button type="primary" class="import" size="mini">导出</el-button>
+                <el-table
+                  ref="singleTable"
+                  :data="tableData"
+                  height="100%"
+                  highlight-current-row
+                  @current-change="handleCurrentChange"
+                  style="width: 100%"
+                >
+                  <el-table-column property="id" width="120" label="id"></el-table-column>
+                  <el-table-column property="phone" label="移动网用户" width="120"></el-table-column>
+                  <el-table-column property="if" label="是否有固网" width="120"></el-table-column>
+                  <el-table-column property="address" label="地址"></el-table-column>
+                </el-table>
               </el-card>
             </el-col>
             <el-col :span="12">
@@ -57,7 +70,7 @@
 import Vue from 'vue'
 import { EleResize } from '@/config/esresize'
 export default {
-  name: 'school',
+  name: 'jm',
   components: {
 
   },
@@ -70,12 +83,54 @@ export default {
       require('../assets/image/tousu.png'),
       require('../assets/image/gaojiazhiyonghu.png')],
       topData: [
-        { label: '物业点人数', data: 5000, danwei: '人' },
-        { label: '电信用户', data: 1000, danwei: '人' },
-        { label: '渗透率', data: 20, danwei: '%' },
+        { label: '移动网用户', data: 5000, danwei: '人' },
+        { label: '固网用户', data: 1000, danwei: '人' },
+        { label: '固网占比', data: 20, danwei: '%' },
         { label: '投诉比', data: 10, danwei: '%' },
         { label: '高值用户比', data: 34, danwei: '%' },
-      ]
+      ],
+      tableData: [{
+        id: '12987122',
+        name: '好滋好味鸡蛋仔',
+        category: '江浙小吃、小吃零食',
+        desc: '荷兰优质淡奶，奶香浓而不腻',
+        address: '上海市普陀区真北路',
+        shop: '王小虎夫妻店',
+        shopId: '10333',
+        phone: '1503604968',
+        if: '是'
+      }, {
+        id: '12987123',
+        name: '好滋好味鸡蛋仔',
+        category: '江浙小吃、小吃零食',
+        desc: '荷兰优质淡奶，奶香浓而不腻',
+        address: '上海市普陀区真北路',
+        shop: '王小虎夫妻店',
+        shopId: '10333',
+        phone: '1503604968',
+        if: '是'
+      }, {
+        id: '12987125',
+        name: '好滋好味鸡蛋仔',
+        category: '江浙小吃、小吃零食',
+        desc: '荷兰优质淡奶，奶香浓而不腻',
+        address: '上海市普陀区真北路',
+        shop: '王小虎夫妻店',
+        shopId: '10333',
+        phone: '1503604968',
+        if: '是'
+      }, {
+        id: '12987126',
+        name: '好滋好味鸡蛋仔',
+        category: '江浙小吃、小吃零食',
+        desc: '荷兰优质淡奶，奶香浓而不腻',
+        address: '上海市普陀区真北路',
+        shop: '王小虎夫妻店',
+        shopId: '10333',
+        phone: '1503604968',
+        if: '是'
+      }],
+      currentRow: null
     }
   },
   created() { },
@@ -91,10 +146,11 @@ export default {
     },
     drawuser() {
       var obj = {
-        xdata: ['电信用户', '高价值用户', '投诉用户'],
+        xdata: ['移动网用户', '固网用户', '高价值用户', '投诉用户'],
         data0: [300, 500, 909, 600, 1030, 800, 550, 1020, 1050],
-        data1: [100, 200, 409, 300, 430, 200, 350, 420, 450],
+        data1: [100, 200, 309, 400, 430, 100, 250, 320, 450],
         data2: [50, 105, 200, 132, 220, 80, 120, 220, 190],
+        data3: [100, 200, 409, 300, 430, 200, 350, 420, 450]
       }
       var option = this.$commonJS.sfChartLine(obj);
       var myChart = this.$echarts.init(document.getElementById('user'));//获取容器元素
@@ -102,9 +158,13 @@ export default {
       this.onsize(myChart, 'user')
     },
     drawPhone() {
-      var data = [400, 500, 500, 500, 500, 400, 400, 500, 500];
-      var xdata = ['华为', 'OPPO', '苹果', '小米', '步步高', 'Vivo', 'VIVO', '魅族', '其它']
-      var option = this.$commonJS.sfChartPhone(xdata, data);
+      var obj = {
+        xdata: ['苹果', '华为', 'OPPO', 'VIVO', '小米', '中兴', '魅族', '锤子'],
+        month1: [400, 400, 300, 300, 300, 400, 400, 400, 300],
+        month2: [400, 400, 300, 300, 300, 400, 400, 400, 300],
+        month3: [400, 400, 300, 300, 300, 400, 400, 400, 300]
+      }
+      var option = this.$commonJS.jmchartBar(obj);
       var myChart = this.$echarts.init(document.getElementById('phoneNum'));//获取容器元素
       myChart.setOption(option, true);
       this.onsize(myChart, 'phoneNum')
@@ -116,11 +176,8 @@ export default {
       var dom = document.getElementById(id)
       EleResize.on(dom, lestener)
     },
-    drawRate() {
-      var option = this.$commonJS.sfChartRate();
-      var myChart = this.$echarts.init(document.getElementById('rate'));//获取容器元素
-      myChart.setOption(option, true);
-      this.onsize(myChart, 'rate')
+    handleCurrentChange(val) {
+      this.currentRow = val;
     },
     drawPie() {
       var yeWu = [{
@@ -173,7 +230,7 @@ export default {
     this.$nextTick(() => {
       this.drawuser()
       this.drawPhone()
-      this.drawRate()
+      // this.drawRate()
       this.drawPie()
     })
 
@@ -243,5 +300,11 @@ export default {
 }
 .topd:nth-child(5) {
   background-color: #41c4be;
+}
+.import {
+  position: absolute;
+  top: 5px;
+  right: 27px;
+  z-index:9
 }
 </style>

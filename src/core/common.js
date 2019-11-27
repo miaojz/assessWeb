@@ -398,8 +398,14 @@ class common {
                 layoutCenter: ["40%", "50%"],
                 layoutSize: "90%",
                 label: {
+                    normal: {
+                        show: true,
+                        textStyle: {
+                            color: '#666'
+                        }
+                    },
                     emphasis: {
-                        show: false
+                        show: false,
                     }
                 },
                 scaleLimit: {
@@ -407,10 +413,14 @@ class common {
                     max: 10,
                 },
                 itemStyle: {
+                    normal: {
+                      areaColor: '#023677',
+                      borderColor: '#1180c7',
+                    },
                     emphasis: {
-                        areaColor: "#fff464"
+                      areaColor: '#4499d0',
                     }
-                },
+                  },
 
             },
             series: [{
@@ -426,20 +436,17 @@ class common {
         }
         return option
     }
-    sfChartLine() {
-        var dianXinUsers = [300, 500, 909, 600, 1030, 800, 550, 1020, 1050];
-        var gaoJiaZhi = [100, 200, 409, 300, 430, 200, 350, 420, 450];
-        var touSuShuLiang = [50, 105, 200, 132, 220, 80, 120, 220, 190];
+    sfChartLine(obj) {
         var option = {
             tooltip: {},
             legend: {
-                data: ['电信用户', '高价值用户', '投诉用户'],
+                data: obj.xdata,
                 x: 'center'
             },
             grid: {
                 left: '4%',
                 right: '4%',
-                bottom: '20%',
+                bottom: '10%',
                 top: '14%',
                 containLabel: true,
                 borderWidth: '0'
@@ -473,49 +480,59 @@ class common {
                             'rgba(242,243,248,1)'
                         ]
                     }
-
                 },
-
             },
             series: [
                 {
-                    name: "电信用户",
+                    name: obj.xdata[0],
                     type: 'line',
-                    data: dianXinUsers,
+                    data: obj.data0,
                     smooth: true,
                     symbolSize: 5,
                     symbol: 'circle',
                     itemStyle: {
                         color: '#5fbdff',
-
                         borderColor: '#5fbdff',
                         borderWidth: 1,
                     }
                 },
                 {
-                    name: "高价值用户",
+                    name: obj.xdata[1],
                     type: 'line',
-                    data: gaoJiaZhi,
+                    data: obj.data1,
                     smooth: true,
                     symbolSize: 5,
                     symbol: 'circle',
                     itemStyle: {
                         color: '#FABF77',
-
                         borderColor: '#FABF77',
                         borderWidth: 1,
                     }
                 },
                 {
-                    name: "投诉用户",
+                    name: obj.xdata[2],
                     type: 'line',
-                    data: touSuShuLiang,
+                    data: obj.data2,
                     smooth: true,
                     symbolSize: 5,
                     symbol: 'circle',
                     itemStyle: {
                         color: '#3CC0BA',
+
                         borderColor: '#3CC0BA',
+                        borderWidth: 1,
+                    }
+                },
+                {
+                    name: obj.xdata[3],
+                    type: 'line',
+                    data: obj.data3,
+                    smooth: true,
+                    symbolSize: 5,
+                    symbol: 'circle',
+                    itemStyle: {
+                        color: '#8D7FEC',
+                        borderColor: '#8D7FEC',
                         borderWidth: 1,
                     }
                 },
@@ -541,8 +558,7 @@ class common {
             },
             legend: {
                 data: ['手机数量'],
-                right: 10,
-                top: 12,
+                x: 'center',
                 textStyle: {
                     color: "#666"
                 },
@@ -634,7 +650,7 @@ class common {
             tooltip: {},
             legend: {
                 data: ['高价值用户比', '投诉用户比'],
-                x: 'middle'
+                x: 'center'
             },
             grid: {
                 left: '4%',
@@ -757,17 +773,17 @@ class common {
     }
     sfChartPie(yewu) {
         var color = ["#8d7fec", "#5085f2", "#41C4BE", "#6A89CC", "#6F43BF", "#82CCDD", "#f59a8f", "#FABF77", "#5FBDFF", "#cf9ef1"];
-        var xdata=[]
-        yewu.map(item=>{
+        var xdata = []
+        yewu.map(item => {
             xdata.push(item.name)
         })
         var option = {
             color: color,
             legend: {
                 orient: "vartical",
-                x: "left",
+                //x: "right",
                 top: "center",
-                left: "60%",
+                right: "20%",
                 bottom: "0%",
                 data: xdata,
                 itemWidth: 8,
@@ -822,6 +838,145 @@ class common {
             }]
         };
         return option
+    }
+    jmchartBar(obj){
+        var option = {
+            tooltip: {
+              trigger: 'axis',
+              axisPointer: { // 坐标轴指示器，坐标轴触发有效
+                type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+              }
+            },
+            grid: {
+              left: '2%',
+              right: '4%',
+              bottom: '14%',
+              top:'16%',
+              containLabel: true
+            },
+             legend: {
+            data: ['8月', '9月', '10月'],
+            right: 10,
+            top:12,
+            textStyle: {
+                color: "black"
+            },
+            itemWidth: 12,
+            itemHeight: 10,
+        },
+            xAxis: {
+              type: 'category',
+              data: obj.xdata,
+              axisLine: {
+                lineStyle: {
+                  color: '#666'
+    
+                }
+              },
+              axisLabel: {
+                textStyle: {
+                  fontFamily: 'Microsoft YaHei'
+                }
+              },
+            },
+    
+            yAxis: {
+              type: 'value',
+              max:'1200',
+              axisLine: {
+                show: false,
+                lineStyle: {
+                  color: 'black'
+                }
+              },
+              splitLine: {
+                show: true,
+               
+              },
+              axisLabel: {}
+            },
+            "dataZoom": [{
+              "show": true,
+              "height": 12,
+              "xAxisIndex": [
+                0
+              ],
+              bottom:'8%',
+              "start": 10,
+              "end": 90,
+              handleIcon: 'path://M306.1,413c0,2.2-1.8,4-4,4h-59.8c-2.2,0-4-1.8-4-4V200.8c0-2.2,1.8-4,4-4h59.8c2.2,0,4,1.8,4,4V413z',
+              handleSize: '110%',
+              handleStyle:{
+                color:"#666",
+    
+              },
+              textStyle:{
+                color:"#fff"},
+              borderColor:"#90979c"
+            }, {
+              "type": "inside",
+              "show": true,
+              "height": 15,
+              "start": 1,
+              "end": 35
+            }],
+            series: [{
+              name: '8月',
+              type: 'bar',
+              barWidth: '15%',
+              itemStyle: {
+                normal: {
+                    color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+                        offset: 0,
+                        color:'#FABF77'
+                    }, {
+                        offset: 1,
+                        color: '#f5804d'
+                    }]),
+                    barBorderRadius: 12,
+                },
+              },
+              data:obj.month1,
+            },
+            {
+              name: '9月',
+              type: 'bar',
+              barWidth: '15%',
+              itemStyle: {
+                normal: {
+                    color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+                        offset: 0,
+                        color: '#3CC0BA'
+                    }, {
+                        offset: 1,
+                        color: '#09bcb7'
+                    }]),
+                    barBorderRadius: 11,
+                }
+                
+              },
+              data:obj.month2
+            },
+            {
+              name: '10月',
+              type: 'bar',
+              barWidth: '15%',
+              itemStyle: {
+                normal: {
+                    color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+                        offset: 0,
+                        color: '#5FBDFF'
+                    }, {
+                        offset: 1,
+                        color: '#6851f1'
+                    }]),
+                barBorderRadius: 11,
+                }
+              },
+              data:obj.month3,
+            }]
+          };
+          return option
     }
 }
 export default new common()

@@ -1,47 +1,53 @@
-const options = [{
-  "value": "河南省",
-  "label": "河南省",
-  "children": [{
+const options = [
+  // {
+  // "value": "河南省",
+  // "label": "河南省",
+  // "children": [
+    {
     "value": "郑州市",
     "label": "郑州市",
     "children": [{
       "value": "中原区", "label": "中原区", children: [
         {
-          value: 'school',
+          value: '/school/校园项目',
           label: '校园项目',
         },
         {
-          value: 'sf/新郑西亚斯国际学院',
+          value: '/jm/居民区',
+          label: '居民区',
+        },
+        {
+          value: '/sf/新郑西亚斯国际学院',
           label: '新郑西亚斯国际学院'
         },{
-          value: 'sf/郑州大学新校区荷园柳园松园',
+          value: '/sf/郑州大学新校区荷园柳园松园',
           label: '郑州大学新校区荷园柳园松园'
         },{
-          value: 'sf/郑州澍青医学高等专科学校',
+          value: '/sf/郑州澍青医学高等专科学校',
           label: '郑州澍青医学高等专科学校'
         },{
-          value: 'sf/郑州旅游职业学院新校区',
+          value: '/sf/郑州旅游职业学院新校区',
           label: '郑州旅游职业学院新校区'
         },{
-          value: 'sf/郑州航院',
+          value: '/sf/郑州航院',
           label: '郑州航院'
         },{
-          value: 'sf/河南中医药大学',
+          value: '/sf/河南中医药大学',
           label: '河南中医药大学'
         },{
-          value: 'sf/河南中医药大学',
+          value: '/sf/河南中医药大学',
           label: '河南中医药大学'
         },{
-          value: 'sf/河南职业技术学院',
+          value: '/sf/河南职业技术学院',
           label: '河南职业技术学院'
         },{
-          value: 'sf/河南建筑职业技术学院新校区',
+          value: '/sf/河南建筑职业技术学院新校区',
           label: '河南建筑职业技术学院新校区'
         },{
-          value: 'sf/郑州信息科技职业学院',
+          value: '/sf/郑州信息科技职业学院',
           label: '郑州信息科技职业学院'
         },{
-          value: 'sf/中牟电子信息职业技术学校',
+          value: '/sf/中牟电子信息职业技术学校',
           label: '中牟电子信息职业技术学校'
         }]
     }, { "value": "二七区", "label": "二七区" }, {
@@ -49,7 +55,7 @@ const options = [{
       "label": "管城回族区",
       children: [
         {
-          value: 'school',
+          value: 'school/校园项目',
           label: '校园项目'
         }
       ]
@@ -254,8 +260,9 @@ const options = [{
       "value": "王屋镇",
       "label": "王屋镇"
     }, { "value": "下冶镇", "label": "下冶镇" }]
-  }]
-},]
+  }
+]
+// },]
 
 export default options
 

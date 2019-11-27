@@ -45,7 +45,7 @@ export default {
 }
 </script>
 
-<style lang="less" >
+<style lang="less" scoped>
 .contain{
      width: 99%;
     height: 91%;
