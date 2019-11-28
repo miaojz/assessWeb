@@ -1,51 +1,15 @@
 <template>
   <div class="height school">
     <div class="leftTop flexbox">
-      <div class="mar1 flexbox">
+      <div class="mar1 flexbox" v-for='(item,index) in boxdata' :key='item.name'>
         <div class="topimg">
-          <img src="../assets/image/xuexiao.png" alt />
+          <img :src="pic[index]" alt />
         </div>
         <div class="topcon">
-          <div>物业点数量</div>
+          <div>{{item.label}}</div>
           <div>
-            118
-            <span class="danwei">个</span>
-          </div>
-        </div>
-      </div>
-      <div class="mar1 flexbox">
-        <div class="topimg">
-          <img src="../assets/image/shentoulv.png" alt />
-        </div>
-        <div class="topcon">
-          <div>渗透率</div>
-          <div>
-            20
-            <span class="danwei">%</span>
-          </div>
-        </div>
-      </div>
-      <div class="mar1 flexbox">
-        <div class="topimg">
-          <img src="../assets/image/koubei1.png" alt />
-        </div>
-        <div class="topcon">
-          <div>口碑好 低值</div>
-          <div>
-            38
-            <span class="danwei">个</span>
-          </div>
-        </div>
-      </div>
-      <div class="flexbox">
-        <div class="topimg">
-          <img src="../assets/image/topdiv3.png" alt />
-        </div>
-        <div class="topcon">
-          <div>口碑差 高值</div>
-          <div>
-            118
-            <span class="danwei">个</span>
+            {{item.data}}
+            <span class="danwei">{{item.daiwei}}</span>
           </div>
         </div>
       </div>
@@ -93,7 +57,10 @@ export default {
           value: '5',
           label: '高价值用户数'
         }],
-        value: ''
+        value: '',
+        pic:[require('../assets/image/xuexiao.png'),require('../assets/image/shentoulv.png'),
+        require('../assets/image/koubei1.png'),require('../assets/image/topdiv3.png')],
+        boxdata:[{label:'物业点数量',data:118,danwei:'个'},{label:'渗透率',data:20,danwei:'%'},{label:'口碑好 低值',data:38,danwei:'个'},{label:'口碑差 高值',data:118,danwei:'个'}]
     }
   },
   components: {

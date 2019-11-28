@@ -10,7 +10,7 @@
           <div class="mainHeader">
             <div class="el-b" v-if="show" :to="{ path: '/index' }">首页</div>
             <el-breadcrumb separator="/" v-else>
-              <el-breadcrumb-item v-for="item in realList" :to="item.path">{{item.name}}</el-breadcrumb-item>
+              <el-breadcrumb-item v-for="item in realList" :key='item.path+"1"' :to="item.path">{{item.name}}</el-breadcrumb-item>
               <el-breadcrumb-item :to="{ path: '/empty' }" v-if="page">{{page}}</el-breadcrumb-item>
             </el-breadcrumb>
             <div class="mainRight">
@@ -87,10 +87,8 @@ export default {
   },
   methods: {
     change(data) {
-      console.log(this.$route)
       var len = data.length - 1;
-      var path=this.$route.path;
-      var arr = ['无线网概览', '室分', '宏站', '专线', '校园', 'CICT', '政企概览', '接入网概览', '家庭宽带']
+      //var arr = ['无线网概览', '室分', '宏站', '专线', '校园', 'CICT', '政企概览', '接入网概览', '家庭宽带']
       this.to('/index' + data[len])
     },
     to(e) {

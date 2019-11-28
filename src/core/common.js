@@ -911,7 +911,7 @@ class common {
     
               },
               textStyle:{
-                color:"#fff"},
+                color:"#666"},
               borderColor:"#90979c"
             }, {
               "type": "inside",
