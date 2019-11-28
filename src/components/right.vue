@@ -43,17 +43,17 @@
                 <span>{{Lineheader}}</span>
               </span>
             </div>
-             <div class="height" id="div1" v-show='secondLine'>
+             <div class="height" id="div1" v-show='secondLine' v-for="item in chans" :key="item.id">
               <div class="oimg" @mouseover="stop" @mouseout="start()" @click="secondClick('回本周期')">
-                <p>36</p>
+                <p>{{item.tzhsq}}</p>
                 <p>回本周期</p>
               </div>
               <div class="oimg" @mouseover="stop" @mouseout="start()" @click="secondClick('arpu')">
-                <p>36</p>
+                <p>{{item.arpu}}</p>
                 <p>arpu(万)</p>
               </div>
               <div class="oimg" @mouseover="stop" @mouseout="start()" @click="secondClick('用户数')">
-                <p>36</p>
+                <p>{{item.yhs}}</p>
                 <p>用户数(万)</p>
               </div>
             </div>
@@ -93,7 +93,18 @@ export default {
       piedata: pieData.sumdata,
       pietitle: '总投入',
       pieheader: '',
-      touruNum: [177133, 169043, 156670, 123908, 61954],
+      touruNum:[],
+      years:[],
+      tzdata:[],
+      srdata:[],
+      trccdata:[],
+      tourus:[],
+      // datas: [4, 4.3, 4.2, 4.5, 4.9, 4.8, 4, 3.8],
+      dats: [],//日期
+      binchan:[],
+      weihu:[],
+      niandu:[],
+      // touruNum: [177133, 169043, 156670, 123908, 61954],
       newNum: [177133, 169043, 156670, 123908, { value: 321779.48,
         itemStyle: {
           borderType: 'dotted',
@@ -122,16 +133,28 @@ export default {
       secondLine:true,
       da: 120, //图片间隔角度
       a0: 0, //已旋转角度,
-      Lineheader:''
+      Lineheader:'',
+      chans:[],
+      arpuLists:[],
+      tzhsqLists:[],
+      yearLists:[],
+      suur:[],//产出换算媒介
+      commType:null //产出类型
+
     }
   },
   created() { },
   mounted() {
+     this.linne()
+     this.chanchus()
+     this.bingtutr()
+    //  this.bingtutr()
     if (this.$route.path == '/' || this.$route.path == '/index/投资收益评估概览') {
       this.com_name = 'eDialog'
     } else if (this.$route.path == '/index/无线网概览') {
       this.com_name = 'eDialogschool'
       this.piedata = pieData.network
+      // this.binchan = pieData.network
     } else {
       this.com_name = 'eDialogschool'
     }
@@ -139,7 +162,7 @@ export default {
     this.$nextTick(() => {
       this.chart = this.$echarts.init(document.getElementById('pie'));//获取容器元素
       this.drawLine()
-      this.drawPie(this.piedata)
+      // this.drawPie(this.binchan)
       this.clickPie()
       this.title = this.page
       this.start()
@@ -167,21 +190,120 @@ export default {
       deep: true,
       handler: function (newval, oldval) {
         if (newval) {
-          this.drawPie(newval)
+          this.drawPie(this.niandu)
         } else {
-          this.drawPie(oldval)
+          this.drawPie(this.weihu)
         }
       }
     }
   },
   methods: {
+  // 河南省投入产生比
+       linne(){
+        var that =this
+         this.$post('/api/index/line',{
+          pageType: "wireless",
+          city:"全省",
+          year:"year",
+          dataType: 'json'
+           }).then(function(res){
+             console.log(res)
+              for (var i= 0; i < res.msg.length; i++) {     
+              that.touruNum.push((res.msg[i].fx/10000).toFixed(2))  //付现
+              that.years.push(res.msg[i].year)//日期
+              that.tzdata.push(res.msg[i].tz)//投入
+               that.srdata.push(res.msg[i].sr)//产出
+             that.trccdata.push(res.msg[i].trccb)
+             }
+            //  console.log(that.touruNum)
+            //  console.log(that.years)
+            //  console.log(that.tzdata)
+            //  console.log(that.srdata)
+           that.drawLine()
+         })
+    },
+    // 投入请求
+       bingtutr(){
+         var that= this
+        this.$post('/api/index/pieIn',{
+          pageType: "wireless",
+          city:"全省",
+          year:"2018",
+          dataType: 'json'
+           }).then(function(res){
+            //  console.log(res)   
+         
+                  var tr_ndzbkz_tzhj=0,tr_bnfxcb_whf=0;
+                  if(res.msg.tr_ndzbkz_tzhj)tr_ndzbkz_tzhj=(res.msg.tr_ndzbkz_tzhj/1000).toFixed(2);
+                  if(res.msg.tr_bnfxcb_whf)tr_ndzbkz_tzhj=res.msg.tr_bnfxcb_whf;
+                  // console.log(tr_ndzbkz_tzhj)
+                 that.binchan.push({"check":true,"name":"4G年度资本开支投资合计","secondName":"year","value":tr_ndzbkz_tzhj},
+                 {"check":true,"name":"本年付现成本","secondName":"ben","value":tr_bnfxcb_whf})
+                // console.log(that.binchan)
+                 that.drawPie(that.binchan)
+                  var tr_ndzbkz_tzhj=0,tr_bnfxcb_whf=0;
+                if(res.msg.tr_ndzbkz_tzhj)tr_ndzbkz_tzhj=res.msg.tr_ndzbkz_tzhj;
+                if(res.msg.tr_bnfxcb_whf)tr_ndzbkz_tzhj=res.msg.tr_bnfxcb_whf;
+                that.weihu.push({"check":false,"name":"本年付现成本维护费","secondName":"","value":tr_bnfxcb_whf},
+                {"check":false,"name":"铁塔租赁费合计","secondName":"","value":tr_bnfxcb_whf},
+                {"check":false,"name":"本年付现成本油机发电","secondName":"","value":tr_bnfxcb_whf},
+                {"check":false,"name":"本年付现成本_电费","secondName":"","value":tr_bnfxcb_whf})
+                // console.log(that.weihu)
+                var tr_ndzbkz_qzxgpt =(res.msg.tr_ndzbkz_qzxgpt/10000).toFixed(2)
+                var tr_ndzbkz_qzjz =(res.msg.tr_ndzbkz_qzjz/10000).toFixed(2)
+                var  tr_ndzbkz_qzhxw= (res.msg.tr_ndzbkz_qzhxw/10000).toFixed(2)
+                var  tr_ndzbkz_qz_ipran= (res.msg.tr_ndzbkz_qz_ipran/10000).toFixed(2)
+                var  tr_ndzbkz_qz_cn= (res.msg.tr_ndzbkz_qz_cn/10000).toFixed(2)
+                var tr_ndzbkz_qzcs= (res.msg.tr_ndzbkz_qzcs/10000).toFixed(2)
+                 that.niandu.push({"check":false,"name":"4G年度资本开支其中4G相关平台","secondName":"","value":tr_ndzbkz_qzxgpt},
+                {"check":false,"name":"4G年度资本开支其中4G基站","secondName":"","value":tr_ndzbkz_qzjz},
+                {"check":false,"name":"4G年度资本开支其中4G核心网","secondName":"","value":tr_ndzbkz_qzhxw},
+                // {"check":false,"name":"4G年度资本开支其中4G核心网","secondName":"","value":res.msg.tr_ndzbkz_qzhxw},
+                {"check":false,"name":"4G年度资本开支IPRan","secondName":"","value":tr_ndzbkz_qz_ipran},
+                {"check":false,"name":"4G年度资本开支其中CN2","secondName":"","value":tr_ndzbkz_qz_cn},
+                {"check":false,"name":"4G年度资本开支其中传输","secondName":"","value":tr_ndzbkz_qzcs})
+                      console.log(tr_ndzbkz_qzcs) 
+                 })
+              },
+    // 产出
+         chanchus(){
+           var that =this
+           var svf =[]
+          this.$post('/api/index/pieOut',{
+          pageType: "wireless",
+          city:"全省",
+          year:"2018",
+          dataType: 'json'
+           }).then(function(res){
+             console.log("pieOut---------------")
+             console.log(res)
+             console.log("pieOut---------------")
+                var yhss = (res.msg.yhs/10000).toFixed(2)   
+               for (var i = 0; i <res.msg.yhsList.length; i++) {
+                     that.suur.push((res.msg.yhsList[i]/10000).toFixed(2))
+                // console.log(sxc)      
+                }
+              // console.log(that.suur) 
+             that.chans.push({"arpu":res.msg.arpu,"tzhsq":res.msg.tzhsq,"yhs":yhss})   
+             that.arpuLists.push({"arpuList":res.msg.arpuList},{"tzhsqList":res.msg.tzhsqList},{"yearList":that.suur})  
+            //  that.tzhsqLists.push({"tzhsqList":res.msg.tzhsqList})
+            //  that.yearLists.push({"yearList":res.msg.yearList})
+              //  that.arpuLists={"arpuList":res.msg.arpuList}
+             that.dats.push(res.msg.yearList)
+            //  console.log(that.dats) 
+            //  that.drawPie1(name)
+             
+           })
+      },
     back() {
-      if (this.$route.path == '/index/无线网概览/network') {
-        this.piedata = pieData.network
-      } else {
-        this.piedata = pieData.sumdata
-      }
-      this.pietitle = '总投入',
+      // if (this.$route.path == '/index/无线网概览/network') {
+      //   this.piedata = pieData.network
+      // } else {
+      //  // this.piedata = pieData.sumdata
+      //    this.piedata = this.binchan
+      // }
+        this.drawPie(this.binchan)
+        this.pietitle = '总投入',
         this.pieheader = ''
     },
     open() {
@@ -232,15 +354,16 @@ export default {
           this.chooseData = ['ALL_SELECT'].concat(val);
         }
       }
-
       // 储存当前选择的最后结果 作为下次的老数据
       this.oldChooseData = this.chooseData;
 
     },
     drawPie(piedata) {
       var that = this;
+      // console.log(piedata)
       var colorList = ['#6990D5', '#FF7F50', '#3feed4', '#00d488', '#afa3f5', '#f1bb4c', "#6A9DFF", '#ffc257', 'rgba(5, 65, 110, 1)', '#3bafff', '#ffedcc', '#fd6f97', '#fed4e0', '#a181fc', '#115dab', '#e3d9fe'];
       var option = {
+        
         title: {
           subtext: that.pietitle,
           x: '42%',
@@ -275,6 +398,7 @@ export default {
 
           },
           icon: 'roundRect'
+          
         },
         series: [
           // 主要展示层的
@@ -326,9 +450,12 @@ export default {
                     align: 'left'
                   }
                 }
-              }
+              },
+
             },
-            data: piedata
+             data: piedata
+            //data:this.binchan
+
           },
           // 边框的设置
           {
@@ -378,7 +505,7 @@ export default {
       var that = this;
       // 处理点击事件并且跳转到相应的百度搜索页面
       this.chart.on('click', function (param) {
-        console.log(param)
+        // console.log(param)
         var name = param.name;
         if (param.data.check) {
           that.pietitle = name;
@@ -398,27 +525,35 @@ export default {
       });
     },
     drawLine() {
-      var category = ['2015', '2016', '2017', '2018', '2019'];
+      // var category = ['2015', '2016', '2017', '2018', '2019'];
+     var category =this.years
+
+      // console.log(this.years)
       var dottedBase = [];
-      var lineData = this.touruNum;
-      var barData = this.chanchu;
-      var newData = this.newNum
-      var rateData = []; var dot = []
-      for (var i = 0; i < 5; i++) {
-        var bar = barData[i];
-        if (barData[i].value) {
-          bar = barData[i].value
-        }
-        var line = lineData[i]
-        if (lineData[i].value) line = lineData[i].value;
-        var rate = bar / line;
-        if (i == 4) {
-          rateData[i] = '-'
-        } else {
-          rateData[i] = rate.toFixed(2);
-        }
-        dot[i] = rate.toFixed(2)
-      }
+      var lineData = this.tzdata;//投入
+      var barData = this.srdata;//产出
+      var newData = this.tzdata//付现
+      var rateData = JSON.parse(JSON.stringify(this.trccdata)); 
+       var dot = this.trccdata
+      var len=rateData.length-1
+      rateData[len]='-'
+      // console.log(dot)
+      // var rateData = []; var dot = []
+      // for (var i = 0; i < 5; i++) {
+      //   var bar = barData[i];
+      //   if (barData[i].value) {
+      //     bar = barData[i].value
+      //   }
+      //   var line = lineData[i]
+      //   if (lineData[i].value) line = lineData[i].value;
+      //   var rate = bar / line;
+      //   if (i == 4) {
+      //     rateData[i] = '-'
+      //   } else {
+      //     rateData[i] = rate.toFixed(2);
+      //   }
+      //   dot[i] = rate.toFixed(2)
+      // }
       // option
       var option = {
         tooltip: {
@@ -600,7 +735,7 @@ export default {
       }
       EleResize.on(dom, lestener)
     },
-    drawPie1(name) {
+    drawPie1(data) {
       var option = {
         grid: {
           top: "15%",
@@ -614,13 +749,7 @@ export default {
             data:[name]
           },
         xAxis: {
-          data: [
-            "2015",
-            "2016",
-            "2017",
-            "2018",
-            "2019",
-          ],
+          data:this.dats[0],
           axisLine: {
             show: false, //隐藏X轴轴线
           },
@@ -661,7 +790,8 @@ export default {
         ],
         series: [
           {
-            name: name,
+            // default: false,
+            name: name, 
             type: "line",
             smooth: true, //平滑曲线显示
             showAllSymbol: false, //显示所有图形。
@@ -690,11 +820,10 @@ export default {
                 },
               ]),
             },
-            data: [4, 4.3, 4.2, 4.5, 4.9, 4.8, 4, 3.8],
+        data:data
           },
-
-        ],
-      }
+        ],  
+      }  
       this.myPie = this.$echarts.init(document.getElementById('pie1'));//获取容器元素
       this.myPie.setOption(option,true);
       var dom = document.getElementById('pie1')
@@ -703,7 +832,6 @@ export default {
         that.myPie.resize()
       }
       EleResize.on(dom, lestener)
-
     },
     randomFrom(lowerValue, upperValue) {
       return Math.floor(Math.random() * (upperValue - lowerValue + 1) + lowerValue);
@@ -731,12 +859,23 @@ export default {
       window.clearInterval(this.timer);
     },
     secondClick(type){
-      this.secondLine=!this.secondLine;
-      this.$nextTick(() => {
-        this.drawPie1(type)
-        this.stop()
-        console.log(type)
+      // console.log("type=============="+type)
+      this.commType = type;
+      // console.log("commType=============="+this.commType)
+        this.secondLine=!this.secondLine;
+        this.$nextTick(() => {
         this.Lineheader=' > '+type
+        if(type=="用户数"){
+         this.drawPie1(this.arpuLists[2].yearList)
+        }
+        if(type=="arpu"){
+         this.drawPie1(this.arpuLists[0].arpuList)
+        }
+         if(type=="回本周期"){
+         this.drawPie1(this.arpuLists[1].tzhsqList)
+        }
+        this.stop()
+       
       })
       
     },
@@ -744,14 +883,32 @@ export default {
       this.secondLine=true;
       this.$nextTick(() => {
           this.start()
-          this.Lineheader=''
+          this.Lineheader='' 
         })
     }
   }
 }
 </script>
 
-<style lang="less" >
+<style lang="less" scoped>
+.contain{
+  width:99%;
+  height:100%;
+  box-sizing: border-box;
+  .el-row {
+    width:100%;
+    height:100%;
+    &:last-child {
+      margin-bottom: 0;
+    }
+    .el-col{
+      height:100%;
+    }
+    .box-card{
+      height:100%
+    }
+  }
+}
 .rightBottom {
   width: 100%;
   height: 48%;
@@ -812,7 +969,8 @@ export default {
     background-size: 100% 100%;
     > p:nth-child(1) {
       color: #fff;
-      font-size: 2em;
+      // 文字太大2em
+      font-size: 1.5em;
       line-height: 60px;
     }
   }

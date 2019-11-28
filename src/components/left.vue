@@ -8,7 +8,7 @@
     </div>
     <div id="map"></div>
     <div class='mapTip'>
-        <div class='agile-num'><p>130%</p></div>
+        <div class='agile-num'><p>{{stop}}%</p></div>
         <div class='agile-detail'>河南省投入产出比</div>
     </div>
   </el-card>
@@ -30,12 +30,17 @@ export default {
   data() {
     return {
       page: this.$route.params.id,
-      data: []
+      data: [],
+      stop:'',
+       quyu:[],
+      data1:[]
     }
   },
   created() { },
   mounted() {
-    this.drawMap()
+    // this.drawMap()
+    this.maaptop()
+    this.ditumap()
     //获取store。js {{this.$store.state.date}}
     console.log(this.$store.state.date)
   },
@@ -49,6 +54,47 @@ export default {
     }
   },
   methods: {
+    // 地图左上角数据
+      maaptop(){
+           var that =this
+         this.$post('/api/index/mapTop',{
+          pageType: "wireless",
+          city:"全省",
+          // year:"2018",
+          dataType: 'json'
+           }).then(function(res){
+             console.log('jjj')
+             console.log(res)
+            //  console.log($data.stop)
+            //  this.stop=res.msg[0].trccb
+          //  console.log(this.data.stop)   
+            console.log(res.msg[0].trccb)
+           that.stop =res.msg[0].trccb
+           console.log(that.stop)
+         })
+      },//地图
+        ditumap(){
+           var that =this
+         this.$post('/api/index/map',{
+          pageType: "wireless",
+          // city:"全省",
+          year:this.$store.state.date,
+          dataType: 'json'
+           }).then(function(res){
+               console.log(res)
+        for (var i = 0; i < res.msg.length; i++) {
+          that.quyu.push(res.msg[i])
+          console.log(that.quyu)
+        
+           }
+              that.quyu.map((value,key,arry)=>{
+           that.data1.push({'name': value.city, 'value': value.trccb })
+           
+         })
+         console.log(that.data1)
+           that.drawMap()
+        })
+      },
     to(e) {
       window.scrollTo(0, 0)
       if (e != this.$route.path) {
@@ -58,24 +104,26 @@ export default {
       }
     },
     drawMap() {
-      var data = [{ name: "安阳市", rate: Math.round(1e3 * Math.random()), value: 92 },
-      { name: "新乡市", rate: Math.round(1e3 * Math.random()), value: 91 },
-      { name: "濮阳市", rate: Math.round(1e3 * Math.random()), value: 183 },
-      { name: "焦作市", rate: Math.round(1e3 * Math.random()), value: 155 },
-      { name: "鹤壁市", rate: Math.round(1e3 * Math.random()), value: 108 },
-      { name: "三门峡市", rate: Math.round(1e3 * Math.random()), value: 83 },
-      { name: "信阳市", rate: Math.round(1e3 * Math.random()), value: 98 },
-      { name: "南阳市", rate: Math.round(1e3 * Math.random()), value: 106 },
-      { name: "周口市", rate: Math.round(1e3 * Math.random()), value: 158 },
-      { name: "商丘市", rate: Math.round(1e3 * Math.random()), value: 130 },
-      { name: "平顶山市", rate: Math.round(1e3 * Math.random()), value: 176 },
-      { name: "开封市", rate: Math.round(1e3 * Math.random()), value: 102 },
-      { name: "洛阳市", rate: Math.round(1e3 * Math.random()), value: 122 },
-      { name: "济源市", rate: Math.round(1e3 * Math.random()), value: 111 },
-      { name: "漯河市", rate: Math.round(1e3 * Math.random()), value: 153 },
-      { name: "许昌市", rate: Math.round(1e3 * Math.random()), value: 140 },
-      { name: "郑州市", rate: Math.round(1e3 * Math.random()), value: 190 },
-      { name: "驻马店市", rate: Math.round(1e3 * Math.random()), value: 192 }];
+      var data= this.data1
+      // console.log(data)
+      // var data = [{ name: "安阳市", rate: Math.round(1e3 * Math.random()), value: 92 },
+      // { name: "新乡市", rate: Math.round(1e3 * Math.random()), value: 91 },
+      // { name: "濮阳市", rate: Math.round(1e3 * Math.random()), value: 183 },
+      // { name: "焦作市", rate: Math.round(1e3 * Math.random()), value: 155 },
+      // { name: "鹤壁市", rate: Math.round(1e3 * Math.random()), value: 108 },
+      // { name: "三门峡市", rate: Math.round(1e3 * Math.random()), value: 83 },
+      // { name: "信阳市", rate: Math.round(1e3 * Math.random()), value: 98 },
+      // { name: "南阳市", rate: Math.round(1e3 * Math.random()), value: 106 },
+      // { name: "周口市", rate: Math.round(1e3 * Math.random()), value: 158 },
+      // { name: "商丘市", rate: Math.round(1e3 * Math.random()), value: 130 },
+      // { name: "平顶山市", rate: Math.round(1e3 * Math.random()), value: 176 },
+      // { name: "开封市", rate: Math.round(1e3 * Math.random()), value: 102 },
+      // { name: "洛阳市", rate: Math.round(1e3 * Math.random()), value: 122 },
+      // { name: "济源市", rate: Math.round(1e3 * Math.random()), value: 111 },
+      // { name: "漯河市", rate: Math.round(1e3 * Math.random()), value: 153 },
+      // { name: "许昌市", rate: Math.round(1e3 * Math.random()), value: 140 },
+      // { name: "郑州市", rate: Math.round(1e3 * Math.random()), value: 190 },
+      // { name: "驻马店市", rate: Math.round(1e3 * Math.random()), value: 192 }];
       var geoCoordMap = { // 地图数据
         "郑州市": [113.43808, 34.619528],
         "安阳市": [114.336098, 36.082031],
@@ -99,9 +147,11 @@ export default {
       var mapName = '河南';
       // 最大值 4
       var max = Math.max.apply(Math, data.map(item => { return item.value })) + 20
+      console.log(max)
 
       // 最小值 1
-      var min = Math.min.apply(Math, data.map(item => { return item.value })) - 20
+      var min = Math.min.apply(Math, data.map(item => { return item.value }))-20
+      console.log(min)
       var maxSize4Pin = 100,
         minSize4Pin = 20;
 
@@ -130,13 +180,7 @@ export default {
           },
           formatter: function (params) {
             var tipHtml = ''; var data = '', rate = ''
-            if (params.componentSubType == 'map') {
-              rate = params.data.value;
-              data = params.data.rate;
-            } else {
-              data = params.data.value[2]
-              rate = params.data.value[3]
-            }
+            console.log(params)
             tipHtml = '<div style="width:200px;height:100px;background:rgba(22,80,158,0.8);border:1px solid rgba(7,166,255,0.7)">'
               + '<div style="width:80%;height:40px;line-height:40px;border-bottom:2px solid rgba(7,166,255,0.7);padding:0 20px">' + '<i style="display:inline-block;width:8px;height:8px;background:#16d6ff;border-radius:40px;">' + '</i>'
               + '<span style="margin-left:10px;color:#fff;font-size:16px;">' + params.name + '</span>' + '</div>'
@@ -144,7 +188,7 @@ export default {
               // +'<p style="color:#fff;font-size:12px;">'+'<i style="display:inline-block;width:10px;height:10px;background:#16d6ff;border-radius:40px;margin:0 8px">'+'</i>'
               // +'无线网项目数量：'+'<span style="color:#f48225;margin:0 6px;font-size:14px;">'+data+'</span>'+'个'+'</p>'
               + '<p style="color:#fff;font-size:12px;">' + '<i style="display:inline-block;width:10px;height:10px;background:#16d6ff;border-radius:40px;margin:0 8px">' + '</i>'
-              + '投入产出比：' + '<span style="color:#11ee7d;margin:0 6px;font-size:14px;">' + rate + '</span>' + '%' + '</p>'
+              + '投入产出比：' + '<span style="color:#11ee7d;margin:0 6px;font-size:14px;">' + params.data.value + '</span>' + '%' + '</p>'
               + '</div>' + '</div>';
             return tipHtml;
           }
@@ -158,7 +202,7 @@ export default {
           left: '0',
           top: 'bottom',
           calculable: true,
-          seriesIndex: [1],
+          seriesIndex: [0],
           text: ['投入产出比(%)', ''],
           textGap: 16,
           align: 'left',
@@ -197,31 +241,6 @@ export default {
           layoutCenter: ['40%', '50%'],
         },
         series: [
-          {
-            name: '无线网投入产出比',
-            type: 'scatter',
-            coordinateSystem: 'geo',
-            // data: convertData(data),
-            // symbolSize: function(val) {
-            //     return val[2]/60 ;
-            // },
-            label: {
-              normal: {
-                formatter: '{b}',
-                position: 'right',
-                show: true,
-                color: '#666'
-              },
-              emphasis: {
-                show: true
-              }
-            },
-            itemStyle: {
-              normal: {
-                color: '#FF7F50'
-              }
-            }
-          },
           {
             type: 'map',
             map: mapName,
