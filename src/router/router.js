@@ -14,28 +14,23 @@ Vue.use(Router);
 
 export default new Router({
     mode: 'hash',
-    routes: [{
+    routes: [
+        {
         path: '/',
-        name: 'first',
         redirect: '/index',
-        component: () => import('../views/home.vue'),
-        meta: {
-            title: '中国电信河南公司投资收益评估系统',
-            isKeepAlive: false,
-        },
     },
     {
         path: '/index',
-        name: '首页',
         component: () => import('../views/home.vue'),
+        redirect: '/index',
+        name:'首页',
         meta: {
             title: '中国电信河南公司投资收益评估系统',
             isKeepAlive: false,
         },
         children: [
             {
-                path: '/',
-                name: '首页',
+                path: '',
                 component: () => import('../views/index.vue'),
             },
             {

@@ -414,13 +414,13 @@ class common {
                 },
                 itemStyle: {
                     normal: {
-                      areaColor: '#023677',
-                      borderColor: '#1180c7',
+                        areaColor: '#023677',
+                        borderColor: '#1180c7',
                     },
                     emphasis: {
-                      areaColor: '#4499d0',
+                        areaColor: '#4499d0',
                     }
-                  },
+                },
 
             },
             series: [{
@@ -644,12 +644,11 @@ class common {
         return option
     }
     sfChartRate() {
-        var wuYeDianRenShu = [300, 500, 909, 600, 1030, 800, 550, 1020, 1050];
         var dianXinYongHu = [100, 200, 409, 300, 430, 200, 350, 420, 450];
         var option = {
             tooltip: {},
             legend: {
-                data: ['高价值用户比', '投诉用户比'],
+                data: ['投诉用户数'],
                 x: 'center'
             },
             grid: {
@@ -693,55 +692,18 @@ class common {
             },
             series: [
                 {
-                    name: "高价值用户比",
-                    type: 'line',
-                    data: wuYeDianRenShu,
-                    smooth: true,
-                    itemStyle: {
-                        normal: { //颜色渐变函数 前四个参数分别表示四个位置依次为左、下、右、上
-                            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
-                                offset: 0,
-                                color: '#1a75bb' // 0% 处的颜色
-                            }, {
-                                offset: 0.5,
-                                color: '#1a75bb' // 100% 处的颜色
-                            }, {
-                                offset: 1,
-                                color: '#04122a' // 100% 处的颜色
-                            }]), //背景渐变色
-                            lineStyle: { // 系列级个性化折线样式
-                                width: 0.5,
-                                type: 'solid',
-                                color: "#02675f"
-                            }
-                        },
-                        emphasis: {
-                            color: '#02675f',
-                            lineStyle: { // 系列级个性化折线样式
-                                width: 0.5,
-                                type: 'dotted',
-                                color: "#02675f" //折线的颜色
-                            }
-                        }
-                    }, //
-                    areaStyle: {
-                        normal: {}
-                    },
-
-                },
-                {
-                    name: "投诉用户比",
+                    name: "投诉用户数",
                     type: 'line',
                     data: dianXinYongHu,
                     smooth: true,
                     itemStyle: {
                         normal: { //颜色渐变函数 前四个参数分别表示四个位置依次为左、下、右、上
-                            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+                            color: new echarts.graphic.LinearGradient(0, 1, 0, 0, [{
                                 offset: 0,
-                                color: '#1a3e85' // 0% 处的颜色
+                                color: '#1a75bb' // 0% 处的颜色
                             }, {
                                 offset: 0.5,
-                                color: '#1a3e85' // 100% 处的颜色
+                                color: '#1a75bb' // 100% 处的颜色
                             }, {
                                 offset: 1,
                                 color: '#04122a' // 100% 处的颜色
@@ -839,144 +801,145 @@ class common {
         };
         return option
     }
-    jmchartBar(obj){
+    jmchartBar(obj) {
         var option = {
             tooltip: {
-              trigger: 'axis',
-              axisPointer: { // 坐标轴指示器，坐标轴触发有效
-                type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
-              }
+                trigger: 'axis',
+                axisPointer: { // 坐标轴指示器，坐标轴触发有效
+                    type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+                }
             },
             grid: {
-              left: '2%',
-              right: '4%',
-              bottom: '14%',
-              top:'16%',
-              containLabel: true
+                left: '2%',
+                right: '4%',
+                bottom: '14%',
+                top: '16%',
+                containLabel: true
             },
-             legend: {
-            data: ['8月', '9月', '10月'],
-            right: 10,
-            top:12,
-            textStyle: {
-                color: "black"
-            },
-            itemWidth: 12,
-            itemHeight: 10,
-        },
-            xAxis: {
-              type: 'category',
-              data: obj.xdata,
-              axisLine: {
-                lineStyle: {
-                  color: '#666'
-    
-                }
-              },
-              axisLabel: {
+            legend: {
+                data: ['8月', '9月', '10月'],
+                right: 10,
+                top: 12,
                 textStyle: {
-                  fontFamily: 'Microsoft YaHei'
-                }
-              },
+                    color: "black"
+                },
+                itemWidth: 12,
+                itemHeight: 10,
             },
-    
+            xAxis: {
+                type: 'category',
+                data: obj.xdata,
+                axisLine: {
+                    lineStyle: {
+                        color: '#666'
+
+                    }
+                },
+                axisLabel: {
+                    textStyle: {
+                        fontFamily: 'Microsoft YaHei'
+                    }
+                },
+            },
+
             yAxis: {
-              type: 'value',
-              max:'1200',
-              axisLine: {
-                show: false,
-                lineStyle: {
-                  color: 'black'
-                }
-              },
-              splitLine: {
-                show: true,
-               
-              },
-              axisLabel: {}
+                type: 'value',
+                max: '1200',
+                axisLine: {
+                    show: false,
+                    lineStyle: {
+                        color: 'black'
+                    }
+                },
+                splitLine: {
+                    show: true,
+
+                },
+                axisLabel: {}
             },
             "dataZoom": [{
-              "show": true,
-              "height": 12,
-              "xAxisIndex": [
-                0
-              ],
-              bottom:'8%',
-              "start": 10,
-              "end": 90,
-              handleIcon: 'path://M306.1,413c0,2.2-1.8,4-4,4h-59.8c-2.2,0-4-1.8-4-4V200.8c0-2.2,1.8-4,4-4h59.8c2.2,0,4,1.8,4,4V413z',
-              handleSize: '110%',
-              handleStyle:{
-                color:"#666",
-    
-              },
-              textStyle:{
-                color:"#666"},
-              borderColor:"#90979c"
+                "show": true,
+                "height": 12,
+                "xAxisIndex": [
+                    0
+                ],
+                bottom: '8%',
+                "start": 10,
+                "end": 90,
+                handleIcon: 'path://M306.1,413c0,2.2-1.8,4-4,4h-59.8c-2.2,0-4-1.8-4-4V200.8c0-2.2,1.8-4,4-4h59.8c2.2,0,4,1.8,4,4V413z',
+                handleSize: '110%',
+                handleStyle: {
+                    color: "#666",
+
+                },
+                textStyle: {
+                    color: "#666"
+                },
+                borderColor: "#90979c"
             }, {
-              "type": "inside",
-              "show": true,
-              "height": 15,
-              "start": 1,
-              "end": 35
+                "type": "inside",
+                "show": true,
+                "height": 15,
+                "start": 1,
+                "end": 35
             }],
             series: [{
-              name: '8月',
-              type: 'bar',
-              barWidth: '15%',
-              itemStyle: {
-                normal: {
-                    color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
-                        offset: 0,
-                        color:'#FABF77'
-                    }, {
-                        offset: 1,
-                        color: '#f5804d'
-                    }]),
-                    barBorderRadius: 12,
+                name: '8月',
+                type: 'bar',
+                barWidth: '15%',
+                itemStyle: {
+                    normal: {
+                        color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+                            offset: 0,
+                            color: '#FABF77'
+                        }, {
+                            offset: 1,
+                            color: '#f5804d'
+                        }]),
+                        barBorderRadius: 12,
+                    },
                 },
-              },
-              data:obj.month1,
+                data: obj.month1,
             },
             {
-              name: '9月',
-              type: 'bar',
-              barWidth: '15%',
-              itemStyle: {
-                normal: {
-                    color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
-                        offset: 0,
-                        color: '#3CC0BA'
-                    }, {
-                        offset: 1,
-                        color: '#09bcb7'
-                    }]),
-                    barBorderRadius: 11,
-                }
-                
-              },
-              data:obj.month2
+                name: '9月',
+                type: 'bar',
+                barWidth: '15%',
+                itemStyle: {
+                    normal: {
+                        color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+                            offset: 0,
+                            color: '#3CC0BA'
+                        }, {
+                            offset: 1,
+                            color: '#09bcb7'
+                        }]),
+                        barBorderRadius: 11,
+                    }
+
+                },
+                data: obj.month2
             },
             {
-              name: '10月',
-              type: 'bar',
-              barWidth: '15%',
-              itemStyle: {
-                normal: {
-                    color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
-                        offset: 0,
-                        color: '#5FBDFF'
-                    }, {
-                        offset: 1,
-                        color: '#6851f1'
-                    }]),
-                barBorderRadius: 11,
-                }
-              },
-              data:obj.month3,
+                name: '10月',
+                type: 'bar',
+                barWidth: '15%',
+                itemStyle: {
+                    normal: {
+                        color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+                            offset: 0,
+                            color: '#5FBDFF'
+                        }, {
+                            offset: 1,
+                            color: '#6851f1'
+                        }]),
+                        barBorderRadius: 11,
+                    }
+                },
+                data: obj.month3,
             }]
-          };
-          return option
+        };
+        return option
     }
 }
 export default new common()

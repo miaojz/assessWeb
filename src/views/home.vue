@@ -10,7 +10,7 @@
           <div class="mainHeader">
             <div class="el-b" v-if="show" :to="{ path: '/index' }">首页</div>
             <el-breadcrumb separator="/" v-else>
-              <el-breadcrumb-item v-for="item in realList" :key='item.path+"1"' :to="item.path">{{item.name}}</el-breadcrumb-item>
+              <el-breadcrumb-item v-for="(item,idx) in realList" v-if='item.name' :key='item.name+idx' :to="item.path">{{item.name}}</el-breadcrumb-item>
               <el-breadcrumb-item :to="{ path: '/empty' }" v-if="page">{{page}}</el-breadcrumb-item>
             </el-breadcrumb>
             <div class="mainRight">
@@ -107,7 +107,7 @@ export default {
     //监听路由变化，自动缩减左边菜单栏目
     $route(to, form) {
       var realList=this.$route.matched
-      console.log(this.realList)
+      console.log(this.$route)
       var arr=[];
       this.realList.map(item=>{
           var obj={
@@ -132,7 +132,12 @@ export default {
     }
   },
   mounted() {
-    var realList=this.$route.matched
+    var realList
+    if(this.$store.state.breadcrumbData){
+          realList=this.$route.matched
+    }else{
+        realList=JSON.parse(localStorage.getItem('breadcrumbData'))
+    }
     this.realList=realList;
     this.page=''
     if(this.$route.params.id){

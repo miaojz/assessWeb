@@ -73,7 +73,7 @@ export default {
         { label: '物业点人数', data: 5000, danwei: '人' },
         { label: '电信用户', data: 1000, danwei: '人' },
         { label: '渗透率', data: 20, danwei: '%' },
-        { label: '投诉比', data: 10, danwei: '%' },
+        { label: '万投比', data: 10, danwei: '%' },
         { label: '高值用户比', data: 34, danwei: '%' },
       ]
     }
@@ -91,9 +91,9 @@ export default {
     },
     drawuser() {
       var obj = {
-        xdata: ['电信用户', '高价值用户', '投诉用户'],
+        xdata: ['电信用户', '投诉用户'],
         data0: [300, 500, 909, 600, 1030, 800, 550, 1020, 1050],
-        data1: [100, 200, 409, 300, 430, 200, 350, 420, 450],
+        //data1: [100, 200, 409, 300, 430, 200, 350, 420, 450],
         data2: [50, 105, 200, 132, 220, 80, 120, 220, 190],
       }
       var option = this.$commonJS.sfChartLine(obj);

@@ -8,8 +8,8 @@ Vue.use(Vuex);
 export default new Vuex.Store({
     state:{
         date:'2019',
-
-        breadcrumbData:[]
+        breadcrumbData:[],
+        city:'河南'
     },
     modules: {
         mutations,
@@ -21,7 +21,12 @@ export default new Vuex.Store({
             state.date = date
         },
         changeBreadcrumb(state,item){
-            state.breadcrumbData=item
+            state.breadcrumbData=item;
+            localStorage.setItem('breadcrumbData',JSON.stringify(item))
+        },
+        changeCity(state,city){
+            state.city=city;
+            localStorage.setItem('city',city)
         }
     },
     plugins: [createPersiste()],
