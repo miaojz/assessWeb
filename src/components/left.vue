@@ -23,7 +23,8 @@ import Vue from 'vue';
 //require('../assets/js/henan.js')  //引入china.js地图文件
 //import '../../node_modules/echarts/map/js/province/henan'
 //import "echarts/map/js/china.js";
-import "echarts/map/js/province/henan.js";
+//import "echarts/map/js/province/henan.js";
+import "../assets/js/lnglatjson/henan.js";
 //import zhengzhou from "../assets/js/map/zhengzhou/zhengzhou.js";
 //import anyang from "../assets/js/map/anyang/anyang.js";
 

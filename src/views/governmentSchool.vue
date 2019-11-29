@@ -32,7 +32,8 @@ import Right from '../components/right1'
 import county from '@/config/countyData'
 import mapData from '@/config/map'
 import { EleResize } from '@/config/esresize'
-import "echarts/map/js/province/henan.js";
+//import "echarts/map/js/province/henan.js";
+import "../assets/js/lnglatjson/henan.js";
 import "../assets/js/lnglatjson/anyang/anyang.js";
 import "../assets/js/lnglatjson/hebi/hebi.js";
 import "../assets/js/lnglatjson/jiaozuo/jiaozuo.js";
