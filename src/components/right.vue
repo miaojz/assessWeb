@@ -227,6 +227,8 @@ export default {
         that.binchan.push({ "check": true, "name": "投资合计", "secondName": "niandu", "value": tr_ndzbkz_tzhj },
           { "check": true, "name": "付现合计", "secondName": "weihu", "value": tr_bnfxcb_whf })
         // console.log(that.binchan)
+        
+      that.binchan.sort((a,b)=>{ return b.value-a.value})//升序
         that.drawPie(that.binchan)
         var tr_ndzbkz_tzhj = 0, tr_bnfxcb_whf = 0;
         if (res.msg.tr_ndzbkz_tzhj) tr_ndzbkz_tzhj = res.msg.tr_ndzbkz_tzhj;
@@ -250,6 +252,8 @@ export default {
           { "check": false, "name": "CN2", "secondName": "", "value": tr_ndzbkz_qz_cn },
           { "check": false, "name": "传输", "secondName": "", "value": tr_ndzbkz_qzcs })
         console.log(tr_ndzbkz_qzcs)
+        that.weihu.sort((a,b)=>{ return b.value-a.value})//升序
+        that.niandu.sort((a,b)=>{ return b.value-a.value})//升序
       })
     },
     // 产出
@@ -527,7 +531,7 @@ export default {
         grid: {
           x: '10%',
           width: '82%',
-          y: '10%',
+          y: '12%',
           bottom: '12%'
         },
         xAxis: {
@@ -542,7 +546,7 @@ export default {
           },
         },
         yAxis: [{
-
+          name:'单位:元',
           splitLine: { show: false },
           axisLine: {
             lineStyle: {
@@ -550,10 +554,11 @@ export default {
             }
           },
           axisLabel: {
-            formatter: '{value}元 ',
+            formatter: '{value}',
           }
         },
         {
+          name:'%',
           splitLine: { show: false },
           axisLine: {
             lineStyle: {
@@ -561,7 +566,7 @@ export default {
             }
           },
           axisLabel: {
-            formatter: '{value}% ',
+            formatter: '{value}',
           }
         }],
         series: [
@@ -721,6 +726,7 @@ export default {
         },
         yAxis: [
           {
+            name:'个',
             show: true,
             type: "value",
             axisLine: {

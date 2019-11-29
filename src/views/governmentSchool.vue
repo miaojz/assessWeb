@@ -134,7 +134,8 @@ export default {
               show: true,
               textStyle: {
                 color: '#666'
-              }
+              },
+              formatter: '{b}: {c}'
             },
             emphasis: {
               show: false,
@@ -168,16 +169,7 @@ export default {
                 }
               }
             },
-            roam: true,
-            itemStyle: {
-              normal: {
-                areaColor: '#031525',
-                borderColor: '#3B5077',
-              },
-              emphasis: {
-                areaColor: '#2B91B7'
-              }
-            },
+            //roam: true,
             animation: false,
             data: data
           },

@@ -12,7 +12,7 @@ axios.create({
 
 /* 请求拦截器（请求之前的操作） */
 axios.interceptors.request.use((req) => {
-  showLoading();
+  //showLoading();
   return req;
 }, err => Promise.reject(err));
 

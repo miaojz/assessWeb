@@ -202,7 +202,7 @@ export default {
           top: 'bottom',
           calculable: true,
           seriesIndex: [0],
-          text: ['投入产出比(%)', ''],
+          text: ['投入产出比(%)'],
           textGap: 16,
           align: 'left',
           // inRange: {
@@ -221,7 +221,7 @@ export default {
               // name:'opp',
               textStyle: {
                 color: '#666'
-              }
+              },
             },
             emphasis: {
               show: false,
@@ -266,6 +266,7 @@ export default {
             //                 formatter: '{c}%'
             //             }
             //         },
+            //  },
             roam: true,
             itemStyle: {
               normal: {

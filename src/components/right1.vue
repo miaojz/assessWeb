@@ -287,8 +287,8 @@ export default {
             labelLine: {
               normal: {
                 show: true,
-                length: 14,
-                length2: 90,
+                length: 16,
+                length2: 100,
                 lineStyle: {
                   color: '#d3d3d3'
                 },
@@ -307,8 +307,8 @@ export default {
                   str = '{nameStyle|' + params.name + ' }\n' + '{rate|' + params.value + '}';
                   return str
                 },
-                padding: [0, -96],
-                height: 60,
+                padding: [0, -80],
+                height: 55,
                 rich: {
                   nameStyle: {
                     fontSize: 11,
@@ -621,6 +621,7 @@ export default {
         },
         yAxis: [
           {
+            name:'个',
             show: true,
             type: "value",
             axisLine: {
