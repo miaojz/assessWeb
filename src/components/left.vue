@@ -78,9 +78,10 @@ export default {
          this.$post('/api/index/map',{
           pageType: "wireless",
           // city:"全省",
-          year:this.$store.state.date,
+          year:2018,
           dataType: 'json'
            }).then(function(res){
+             console.log('---------------------')
                console.log(res)
         for (var i = 0; i < res.msg.length; i++) {
           that.quyu.push(res.msg[i])
@@ -105,7 +106,7 @@ export default {
     },
     drawMap() {
       var data= this.data1
-      // console.log(data)
+      // console.log(this.data1)
       // var data = [{ name: "安阳市", rate: Math.round(1e3 * Math.random()), value: 92 },
       // { name: "新乡市", rate: Math.round(1e3 * Math.random()), value: 91 },
       // { name: "濮阳市", rate: Math.round(1e3 * Math.random()), value: 183 },
@@ -180,7 +181,7 @@ export default {
           },
           formatter: function (params) {
             var tipHtml = ''; var data = '', rate = ''
-            console.log(params)
+            //console.log(params)
             tipHtml = '<div style="width:200px;height:100px;background:rgba(22,80,158,0.8);border:1px solid rgba(7,166,255,0.7)">'
               + '<div style="width:80%;height:40px;line-height:40px;border-bottom:2px solid rgba(7,166,255,0.7);padding:0 20px">' + '<i style="display:inline-block;width:8px;height:8px;background:#16d6ff;border-radius:40px;">' + '</i>'
               + '<span style="margin-left:10px;color:#fff;font-size:16px;">' + params.name + '</span>' + '</div>'
@@ -219,6 +220,7 @@ export default {
           label: {
             normal: {
               show: true,
+              // name:'opp',
               textStyle: {
                 color: '#666'
               }
@@ -258,6 +260,14 @@ export default {
                 }
               }
             },
+                //  markPoint: {//图形
+                //         symbolSize: 80,
+                //         label: {
+                //             normal: {
+                //                 show: true,
+                //                 formatter: '{c}%'
+                //             }
+                //         },
             roam: true,
             itemStyle: {
               normal: {
@@ -269,7 +279,9 @@ export default {
               }
             },
             animation: false,
-            data: data
+            data:data
+            
+            
           },
           // {
           //     name: '无线网投入产出比',

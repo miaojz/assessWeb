@@ -50,7 +50,7 @@
               </div>
               <div class="oimg" @mouseover="stop" @mouseout="start()" @click="secondClick('arpu')">
                 <p>{{item.arpu}}</p>
-                <p>arpu(万)</p>
+                <p>arpu(元)</p>
               </div>
               <div class="oimg" @mouseover="stop" @mouseout="start()" @click="secondClick('用户数')">
                 <p>{{item.yhs}}</p>
@@ -91,7 +91,7 @@ export default {
       show: false,
       title: '无线网',
       piedata: pieData.sumdata,
-      pietitle: '总投入',
+      pietitle: '投资付现',
       pieheader: '',
       touruNum:[],
       years:[],
@@ -237,17 +237,17 @@ export default {
                   if(res.msg.tr_ndzbkz_tzhj)tr_ndzbkz_tzhj=(res.msg.tr_ndzbkz_tzhj/1000).toFixed(2);
                   if(res.msg.tr_bnfxcb_whf)tr_ndzbkz_tzhj=res.msg.tr_bnfxcb_whf;
                   // console.log(tr_ndzbkz_tzhj)
-                 that.binchan.push({"check":true,"name":"4G年度资本开支投资合计","secondName":"year","value":tr_ndzbkz_tzhj},
-                 {"check":true,"name":"本年付现成本","secondName":"ben","value":tr_bnfxcb_whf})
+                 that.binchan.push({"check":true,"name":"投资合计","secondName":"year","value":tr_ndzbkz_tzhj},
+                 {"check":true,"name":"付现合计","secondName":"ben","value":tr_bnfxcb_whf})
                 // console.log(that.binchan)
                  that.drawPie(that.binchan)
                   var tr_ndzbkz_tzhj=0,tr_bnfxcb_whf=0;
                 if(res.msg.tr_ndzbkz_tzhj)tr_ndzbkz_tzhj=res.msg.tr_ndzbkz_tzhj;
                 if(res.msg.tr_bnfxcb_whf)tr_ndzbkz_tzhj=res.msg.tr_bnfxcb_whf;
-                that.weihu.push({"check":false,"name":"本年付现成本维护费","secondName":"","value":tr_bnfxcb_whf},
-                {"check":false,"name":"铁塔租赁费合计","secondName":"","value":tr_bnfxcb_whf},
-                {"check":false,"name":"本年付现成本油机发电","secondName":"","value":tr_bnfxcb_whf},
-                {"check":false,"name":"本年付现成本_电费","secondName":"","value":tr_bnfxcb_whf})
+                that.weihu.push({"check":false,"name":"维护费","secondName":"","value":tr_bnfxcb_whf},
+                {"check":false,"name":"铁塔租赁费","secondName":"","value":tr_bnfxcb_whf},
+                {"check":false,"name":"油机发电费","secondName":"","value":tr_bnfxcb_whf},
+                {"check":false,"name":"电费","secondName":"","value":tr_bnfxcb_whf})
                 // console.log(that.weihu)
                 var tr_ndzbkz_qzxgpt =(res.msg.tr_ndzbkz_qzxgpt/10000).toFixed(2)
                 var tr_ndzbkz_qzjz =(res.msg.tr_ndzbkz_qzjz/10000).toFixed(2)
@@ -255,13 +255,13 @@ export default {
                 var  tr_ndzbkz_qz_ipran= (res.msg.tr_ndzbkz_qz_ipran/10000).toFixed(2)
                 var  tr_ndzbkz_qz_cn= (res.msg.tr_ndzbkz_qz_cn/10000).toFixed(2)
                 var tr_ndzbkz_qzcs= (res.msg.tr_ndzbkz_qzcs/10000).toFixed(2)
-                 that.niandu.push({"check":false,"name":"4G年度资本开支其中4G相关平台","secondName":"","value":tr_ndzbkz_qzxgpt},
-                {"check":false,"name":"4G年度资本开支其中4G基站","secondName":"","value":tr_ndzbkz_qzjz},
-                {"check":false,"name":"4G年度资本开支其中4G核心网","secondName":"","value":tr_ndzbkz_qzhxw},
+                 that.niandu.push({"check":false,"name":"4G相关平台","secondName":"","value":tr_ndzbkz_qzxgpt},
+                {"check":false,"name":"4G基站","secondName":"","value":tr_ndzbkz_qzjz},
+                {"check":false,"name":"4G核心网","secondName":"","value":tr_ndzbkz_qzhxw},
                 // {"check":false,"name":"4G年度资本开支其中4G核心网","secondName":"","value":res.msg.tr_ndzbkz_qzhxw},
-                {"check":false,"name":"4G年度资本开支IPRan","secondName":"","value":tr_ndzbkz_qz_ipran},
-                {"check":false,"name":"4G年度资本开支其中CN2","secondName":"","value":tr_ndzbkz_qz_cn},
-                {"check":false,"name":"4G年度资本开支其中传输","secondName":"","value":tr_ndzbkz_qzcs})
+                {"check":false,"name":"IPRan","secondName":"","value":tr_ndzbkz_qz_ipran},
+                {"check":false,"name":"CN2","secondName":"","value":tr_ndzbkz_qz_cn},
+                {"check":false,"name":"传输","secondName":"","value":tr_ndzbkz_qzcs})
                       console.log(tr_ndzbkz_qzcs) 
                  })
               },
@@ -366,7 +366,7 @@ export default {
         
         title: {
           subtext: that.pietitle,
-          x: '42%',
+          x: '38%',
           y: '42%',
           textStyle: {
             fontSize: 30,
@@ -536,7 +536,7 @@ export default {
       var rateData = JSON.parse(JSON.stringify(this.trccdata)); 
        var dot = this.trccdata
       var len=rateData.length-1
-      rateData[len]='-'
+      // rateData[len]='-'  曲线和实线
       // console.log(dot)
       // var rateData = []; var dot = []
       // for (var i = 0; i < 5; i++) {
@@ -582,7 +582,8 @@ export default {
           }
         },
         legend: {
-          data: ['产出', '投入', '付现', '投入产出比',],
+          // data: ['产出', '投入', '收入', '投入产出比',],
+          data: ['资本开支', '付现成本', '收入', '投入产出比',],
           textStyle: {
             color: '#333'
           },
@@ -606,6 +607,7 @@ export default {
           },
         },
         yAxis: [{
+       
           splitLine: { show: false },
           axisLine: {
             lineStyle: {
@@ -613,7 +615,7 @@ export default {
             }
           },
           axisLabel: {
-            formatter: '{value} ',
+            formatter: '{value}元 ',
           }
         },
         {
@@ -624,7 +626,7 @@ export default {
             }
           },
           axisLabel: {
-            formatter: '{value} ',
+            formatter: '{value}% ',
           }
         }],
         series: [
@@ -669,7 +671,8 @@ export default {
             data: dot
           },
           {
-            name: '付现',
+            // name: '付现',
+            name: '付现成本',
             type: 'bar',
             barWidth: 12,
             itemStyle: {
@@ -687,7 +690,8 @@ export default {
             data: newData
           },
           {
-            name: '产出',
+            // name: '产出',
+            name: '收入',
             type: 'bar',
             barWidth: 12,
             itemStyle: {
@@ -705,7 +709,8 @@ export default {
             data: barData
           },
           {
-            name: '投入',
+            // name: '投入',
+            name: '资本开支',
             type: 'bar',
             barWidth: 12,
             itemStyle: {
@@ -723,6 +728,7 @@ export default {
             },
             data: lineData
           },
+         
 
 
         ]
@@ -735,7 +741,9 @@ export default {
       }
       EleResize.on(dom, lestener)
     },
+    
     drawPie1(data) {
+
       var option = {
         grid: {
           top: "15%",
@@ -743,7 +751,17 @@ export default {
           left: "10%",
           right: "6%",
         },
-        tooltip:{ trigger: 'axis',},
+        tooltip:{ trigger: 'axis',
+             formatter:function(data) {
+                    var result = data[0].name + '<br />';
+                 
+                    data.forEach(function (item) {
+                      result += '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:'  + '"></span>  ' + item.data=='回本周期'?: + '万<br/>';
+                    });
+                    return result;
+              
+             }
+        },
         legend:{
             show:true,
             data:[name]
