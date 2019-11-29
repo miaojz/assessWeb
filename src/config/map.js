@@ -1,0 +1,33 @@
+const map={
+    '河南':[{ name: "安阳市", value: 92 },
+    { name: "新乡市", value: 91 },
+    { name: "濮阳市", value: 183 },
+    { name: "焦作市", value: 155 },
+    { name: "鹤壁市", value: 108 },
+    { name: "三门峡市", value: 83 },
+    { name: "信阳市", value: 98 },
+    { name: "南阳市", value: 106 },
+    { name: "周口市", value: 158 },
+    { name: "商丘市", value: 130 },
+    { name: "平顶山市", value: 176 },
+    { name: "开封市", value: 102 },
+    { name: "洛阳市", value: 122 },
+    { name: "济源市", value: 111 },
+    { name: "漯河市", value: 153 },
+    { name: "许昌市", value: 140 },
+    { name: "郑州市", value: 190 },
+    { name: "驻马店市", value: 192 }],
+    '信阳':[
+        {name:'固始县',value:100},
+        {name:'淮滨县',value:183},
+        {name:'罗山县',value:88},
+        {name:'新县',value:32},
+        {name:'平桥区',value:188},
+        {name:'浉河区',value:90},
+        {name:'息县',value:120},
+        {name:'光山县',value:140},
+        {name:'潢川县',value:160},
+        {name:'商城县',value:111}, 
+    ]
+}
+export default map

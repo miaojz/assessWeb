@@ -42,7 +42,7 @@
             </template>
             <el-menu-item index="/index/政企概览">政企概览</el-menu-item>
             <el-menu-item index="/index/专线">专线</el-menu-item>
-            <el-menu-item index="/index/school">校园</el-menu-item>
+            <el-menu-item index="/index/governmentSchool">校园</el-menu-item>
             <el-menu-item index="/index/DICT">DICT</el-menu-item>
           </el-submenu>
           <el-submenu index="接入网">
@@ -72,8 +72,6 @@ export default {
   },
   methods: {
     handleOpen(key, keyPath) {
-      console.log(key, keyPath)
-      this.$store.dispatch('changeMenu',key)
       if (key == '无线网') {
         this.to('/index/无线网概览')
       } else if (key == '政企') {

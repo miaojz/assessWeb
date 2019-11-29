@@ -59,9 +59,9 @@ export default new Router({
                 component: () => import('../views/index.vue'),
             },
             {
-                path: 'school',
+                path: 'governmentSchool',
                 name: '校园',
-                component: () => import('../views/index.vue'),
+                component: () => import('../views/governmentSchool.vue'),
             },
             {
                 path: 'DICT',
@@ -80,17 +80,17 @@ export default new Router({
             },
             {
                 path: 'school/:id',
-                name: '校园项目',
+                name: '',
                 component: () => import('../views/school.vue'),
             },
             {
                 path: 'jm/:id',
-                name: '居民区',
+                name: '',
                 component: () => import('../views/resident.vue'),
             },
             {
                 path: 'sf/:id',
-                name: '室分项目',
+                name: '',
                 component: () => import('../views/shifenXM.vue'),
             },
         ],

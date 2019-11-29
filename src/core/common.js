@@ -643,8 +643,8 @@ class common {
         };
         return option
     }
-    sfChartRate() {
-        var dianXinYongHu = [100, 200, 409, 300, 430, 200, 350, 420, 450];
+    sfChartRate(data) {
+        var dianXinYongHu = data
         var option = {
             tooltip: {},
             legend: {

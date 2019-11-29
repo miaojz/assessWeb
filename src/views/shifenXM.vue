@@ -69,13 +69,8 @@ export default {
       require('../assets/image/shentou.png'),
       require('../assets/image/tousu.png'),
       require('../assets/image/gaojiazhiyonghu.png')],
-      topData: [
-        { label: '物业点人数', data: 5000, danwei: '人' },
-        { label: '电信用户', data: 1000, danwei: '人' },
-        { label: '渗透率', data: 20, danwei: '%' },
-        { label: '万投比', data: 10, danwei: '%' },
-        { label: '高值用户比', data: 34, danwei: '%' },
-      ]
+      topData: [],
+      schoolData:{}
     }
   },
   created() { },
@@ -92,9 +87,9 @@ export default {
     drawuser() {
       var obj = {
         xdata: ['电信用户', '投诉用户'],
-        data0: [300, 500, 909, 600, 1030, 800, 550, 1020, 1050],
+        data0: this.schoolData.bar.dianXinUsers,
         //data1: [100, 200, 409, 300, 430, 200, 350, 420, 450],
-        data2: [50, 105, 200, 132, 220, 80, 120, 220, 190],
+        data2: this.schoolData.bar.touSuShuLiang,
       }
       var option = this.$commonJS.sfChartLine(obj);
       var myChart = this.$echarts.init(document.getElementById('user'));//获取容器元素
@@ -102,8 +97,8 @@ export default {
       this.onsize(myChart, 'user')
     },
     drawPhone() {
-      var data = [400, 500, 500, 500, 500, 400, 400, 500, 500];
-      var xdata = ['华为', 'OPPO', '苹果', '小米', '步步高', 'Vivo', 'VIVO', '魅族', '其它']
+      var data = this.schoolData.phone.data
+      var xdata = this.schoolData.phone.xdata;
       var option = this.$commonJS.sfChartPhone(xdata, data);
       var myChart = this.$echarts.init(document.getElementById('phoneNum'));//获取容器元素
       myChart.setOption(option, true);
@@ -117,67 +112,51 @@ export default {
       EleResize.on(dom, lestener)
     },
     drawRate() {
-      var option = this.$commonJS.sfChartRate();
+      var data=this.schoolData.bar.touSuShuLiang
+      var option = this.$commonJS.sfChartRate(data);
       var myChart = this.$echarts.init(document.getElementById('rate'));//获取容器元素
       myChart.setOption(option, true);
       this.onsize(myChart, 'rate')
     },
     drawPie() {
-      var yeWu = [{
-        name: '腾讯网',
-        value: 36
-      },
-      {
-        name: '普通网页浏览',
-        value: 16
-      },
-      {
-        name: '高德导航',
-        value: 15
-      },
-      {
-        name: '搜狗搜索',
-        value: 3
-      },
-      {
-        name: '淘宝商城',
-        value: 3
-      },
-      {
-        name: '小米生活',
-        value: 7.9
-      },
-      {
-        name: '网易云音乐',
-        value: 6.7
-      },
-      {
-        name: '其他浏览下载',
-        value: 6
-      },
-      {
-        name: '支付宝',
-        value: 4.5
-      },
-      {
-        name: '其它',
-        value: 3
-      }];
+      var yeWu = this.schoolData.yeWu.list
       var option = this.$commonJS.sfChartPie(yeWu);
       var myChart = this.$echarts.init(document.getElementById('pie'));//获取容器元素
       myChart.setOption(option, true);
       this.onsize(myChart, 'pie')
+    },
+    init(){
+      var schooldata;
+    if(this.$store.state.schoolData!=null){
+      schooldata=JSON.parse(this.$store.state.schoolData)
+    }else{
+      schooldata=JSON.parse(localStorage.getItem('school')||[])
     }
-  },
-  mounted() {
+    this.schoolData=schooldata;
+    this.topData=[{ label: '物业点人数', data: schooldata.general.wuyedianrenshu, danwei: '人' },
+        { label: '电信用户', data: schooldata.general.dianxinyonghu, danwei: '人' },
+        { label: '渗透率', data: schooldata.general.shentoulv, danwei: '%' },
+        { label: '万投比', data: schooldata.general.tousubi, danwei: '%' },
+        { label: '高值用户比', data: schooldata.general.gaojiazhiyonghubi, danwei: '%' },]
     this.$nextTick(() => {
       this.drawuser()
       this.drawPhone()
       this.drawRate()
       this.drawPie()
     })
+    }
+  },
+  mounted() {
+    this.init()
 
-  }
+  },
+  watch: {
+    //监听路由变化，自动缩减左边菜单栏目
+    $route(to, form) {
+      console.log('///////')
+      this.init()
+    }
+    }
 }
 </script>
 
