@@ -1,6 +1,6 @@
 <template>
   <div class="contain height">
-   <el-container class="height">
+    <el-container class="height">
       <el-header>
         <Header></Header>
       </el-header>
@@ -10,13 +10,24 @@
           <div class="mainHeader">
             <div class="el-b" v-if="show" :to="{ path: '/index' }">首页</div>
             <el-breadcrumb separator="/" v-else>
-              <el-breadcrumb-item v-for="(item,idx) in realList" v-if='item.name' :key='item.name+idx' :to="item.path">{{item.name}}</el-breadcrumb-item>
+              <el-breadcrumb-item
+                v-for="(item,idx) in realList"
+                v-if="item.name"
+                :key="item.name+idx"
+                :to="item.path"
+              >{{item.name}}</el-breadcrumb-item>
               <el-breadcrumb-item :to="{ path: '/empty' }" v-if="page">{{page}}</el-breadcrumb-item>
             </el-breadcrumb>
             <div class="mainRight">
               <div>
                 <span>项目：</span>
-                <el-cascader :options="options" ref="cascaderAddr" size="mini" @change="change" clearable></el-cascader>
+                <el-cascader
+                  :options="options"
+                  ref="cascaderAddr"
+                  size="mini"
+                  @change="change"
+                  clearable
+                ></el-cascader>
               </div>
               <div>
                 <span>时间：</span>
@@ -77,8 +88,8 @@ export default {
         label: '2018'
       }],
       value: '',
-      path:'',
-      realList:[]      
+      path: '',
+      realList: []
 
     }
   },
@@ -90,14 +101,14 @@ export default {
     change(data) {
       var len = data.length - 1;
       this.to('/index' + data[len])
-      var label=this.$refs.cascaderAddr.getCheckedNodes()[0].label;
-      if(this.$route.params.id){
+      var label = this.$refs.cascaderAddr.getCheckedNodes()[0].label;
+      if (this.$route.params.id) {
         this.show = false;
-        this.page=label;
+        this.page = label;
       }
-      var data=JSON.stringify(schoolData[label])
-      if(data!=undefined){
-          this.$store.commit('changeSchool',data)
+      var data1 = JSON.stringify(schoolData[label])
+      if (data1 != undefined) {
+        this.$store.commit('changeSchool', data1)
       }
     },
     to(e) {
@@ -115,7 +126,7 @@ export default {
   watch: {
     //监听路由变化，自动缩减左边菜单栏目
     $route(to, form) {
-     this.realList=this.$route.matched
+      this.realList = this.$route.matched
       console.log(this.$route.matched)
       // var arr=[];
       // realList.map(item=>{
@@ -135,23 +146,23 @@ export default {
     }
   },
   mounted() {
-    var realList=this.$route.matched
+    var realList = this.$route.matched
     // if(this.$store.state.breadcrumbData.length>0){
     //       realList=this.$store.state.breadcrumbData
     // }else{
     //     realList=JSON.parse(localStorage.getItem('breadcrumbData'))
     // }
-    this.realList=realList;
+    this.realList = realList;
     this.show = false;
     console.log(this.$route.matched)
-    if(this.$route.params.id){
-        this.show = false;
-        this.page=this.$route.params.id;
-        console.log(this.$route.params.id)
-      }else{
-        this.page='';
-     // this.show = true;
-      }
+    if (this.$route.params.id) {
+      this.show = false;
+      this.page = this.$route.params.id;
+      console.log(this.$route.params.id)
+    } else {
+      this.page = '';
+      // this.show = true;
+    }
     // this.$post('/api/index/line',{}).then(res=>{
     //   console.log(res)
     // })
