@@ -7,9 +7,11 @@
       </span>
     </div>
     <div id="map"></div>
-    <div class='mapTip'>
-        <div class='agile-num'><p>{{stop}}%</p></div>
-        <div class='agile-detail'>河南省投入产出比</div>
+    <div class="mapTip">
+      <div class="agile-num">
+        <p>{{stop}}%</p>
+      </div>
+      <div class="agile-detail">河南省投入产出比</div>
     </div>
   </el-card>
 </template>
@@ -31,9 +33,9 @@ export default {
     return {
       page: this.$route.params.id,
       data: [],
-      stop:'',
-       quyu:[],
-      data1:[]
+      stop: '',
+      quyu: [],
+      data1: []
     }
   },
   created() { },
@@ -46,52 +48,52 @@ export default {
   },
   watch: {
     $route(to, from) {
-      
+
     }
   },
   methods: {
     // 地图左上角数据
-      maaptop(){
-           var that =this
-         this.$post('/api/index/mapTop',{
-          pageType: "wireless",
-          city:"全省",
-          // year:"2018",
-          dataType: 'json'
-           }).then(function(res){
-            //  console.log('jjj')
-            //  console.log(res)
-            //  console.log($data.stop)
-            //  this.stop=res.msg[0].trccb
-          //  console.log(this.data.stop)   
-            // console.log(res.msg[0].trccb)
-           that.stop =res.msg[0].trccb
-          //  console.log(that.stop)
-         })
-      },//地图
-        ditumap(){
-           var that =this
-         this.$post('/api/index/map',{
-          pageType: "wireless",
-          // city:"全省",
-          year:2018,
-          dataType: 'json'
-           }).then(function(res){
-             console.log('---------------------')
-               console.log(res)
+    maaptop() {
+      var that = this
+      this.$post('/api/index/mapTop', {
+        pageType: "wireless",
+        city: "全省",
+        // year:"2018",
+        dataType: 'json'
+      }).then(function (res) {
+        //  console.log('jjj')
+        //  console.log(res)
+        //  console.log($data.stop)
+        //  this.stop=res.msg[0].trccb
+        //  console.log(this.data.stop)   
+        // console.log(res.msg[0].trccb)
+        that.stop = res.msg[0].trccb
+        //  console.log(that.stop)
+      })
+    },//地图
+    ditumap() {
+      var that = this
+      this.$post('/api/index/map', {
+        pageType: "wireless",
+        // city:"全省",
+        year: 2018,
+        dataType: 'json'
+      }).then(function (res) {
+        console.log('---------------------')
+        console.log(res)
         for (var i = 0; i < res.msg.length; i++) {
           that.quyu.push(res.msg[i])
           //console.log(that.quyu)
-        
-           }
-              that.quyu.map((value,key,arry)=>{
-           that.data1.push({'name': value.city, 'value': value.trccb })
-           
-         })
+
+        }
+        that.quyu.map((value, key, arry) => {
+          that.data1.push({ 'name': value.city, 'value': value.trccb })
+
+        })
         // console.log(that.data1)
-           that.drawMap()
-        })
-      },
+        that.drawMap()
+      })
+    },
     to(e) {
       window.scrollTo(0, 0)
       if (e != this.$route.path) {
@@ -101,7 +103,7 @@ export default {
       }
     },
     drawMap() {
-      var data= this.data1
+      var data = this.data1
       // console.log(this.data1)
       // var data = [{ name: "安阳市", rate: Math.round(1e3 * Math.random()), value: 92 },
       // { name: "新乡市", rate: Math.round(1e3 * Math.random()), value: 91 },
@@ -147,7 +149,7 @@ export default {
       console.log(max)
 
       // 最小值 1
-      var min = Math.min.apply(Math, data.map(item => { return item.value }))-20
+      var min = Math.min.apply(Math, data.map(item => { return item.value })) - 20
       console.log(min)
       var maxSize4Pin = 100,
         minSize4Pin = 20;
@@ -255,14 +257,14 @@ export default {
                 }
               }
             },
-                //  markPoint: {//图形
-                //         symbolSize: 80,
-                //         label: {
-                //             normal: {
-                //                 show: true,
-                //                 formatter: '{c}%'
-                //             }
-                //         },
+            //  markPoint: {//图形
+            //         symbolSize: 80,
+            //         label: {
+            //             normal: {
+            //                 show: true,
+            //                 formatter: '{c}%'
+            //             }
+            //         },
             roam: true,
             itemStyle: {
               normal: {
@@ -274,9 +276,9 @@ export default {
               }
             },
             animation: false,
-            data:data
-            
-            
+            data: data
+
+
           },
           // {
           //     name: '无线网投入产出比',
@@ -339,33 +341,33 @@ export default {
 #map {
   position: relative;
 }
-.box-card{
-    position: relative;
+.box-card {
+  position: relative;
 }
-.mapTip{
-    position: absolute;
-    top:70px;
-    left:10px;
-    width: 140px;
-    height:40px;
-    border-left: 3px solid #f8ac59;
-    background: #FAFAFB;
-    margin: 0 0 10px 0;
-    padding: 10px;
-    border-radius: 2px;
+.mapTip {
+  position: absolute;
+  top: 70px;
+  left: 10px;
+  width: 140px;
+  height: 40px;
+  border-left: 3px solid #f8ac59;
+  background: #fafafb;
+  margin: 0 0 10px 0;
+  padding: 10px;
+  border-radius: 2px;
 }
 .agile-detail {
-    margin-top: 5px;
-    font-size: 12px;
+  margin-top: 5px;
+  font-size: 12px;
 }
-.agile-num{
-    color: #f8ac59;
-    font-size: 16px;
-    font-weight: bold;
-    display: flex;
-    justify-content: space-between;
-    >p:nth-child(2){
-        color: #CC355B
-    }
+.agile-num {
+  color: #f8ac59;
+  font-size: 16px;
+  font-weight: bold;
+  display: flex;
+  justify-content: space-between;
+  > p:nth-child(2) {
+    color: #cc355b;
+  }
 }
 </style>
