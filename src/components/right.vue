@@ -6,7 +6,7 @@
           <div slot="header" class="clearfix">
             <span class="cardHead">
               <i class="el-icon-s-management"></i>
-              河南省{{page}}投入产出比
+              {{city}}投入产出比
             </span>
             <el-button
               type="primary"
@@ -139,22 +139,21 @@ export default {
       tzhsqLists:[],
       yearLists:[],
       suur:[],//产出换算媒介
-      commType:null //产出类型
-
+      commType:null, //产出类型
+      city: this.$store.state.city,
     }
   },
   created() { },
   mounted() {
+     if (!this.$store.state.city) this.city = localStorage.getItem(city)
      this.linne()
      this.chanchus()
      this.bingtutr()
     //  this.bingtutr()
-    if (this.$route.path == '/' || this.$route.path == '/index/投资收益评估概览') {
+    if (this.$route.path == '/index') {
       this.com_name = 'eDialog'
     } else if (this.$route.path == '/index/无线网概览') {
       this.com_name = 'eDialogschool'
-      this.piedata = pieData.network
-      // this.binchan = pieData.network
     } else {
       this.com_name = 'eDialogschool'
     }
@@ -170,32 +169,24 @@ export default {
   },
   watch: {
     $route(to, from) {
-      this.piedata = pieData.sumdata
-      if (this.$route.path == '/' || this.$route.path == '/index/投资收益评估概览') {
-        this.com_name = 'eDialog';
-        this.page = '';
-      } else if (this.$route.path == '/index/无线网概览/network') {
-        this.piedata = pieData.network
-        this.com_name = 'eDialogschool'
-        this.page = to.params.id.replace('概览', '');
-      } else {
-        this.com_name = 'eDialogschool'
-        this.page = to.params.id.replace('概览', '');
-      }
-      this.title = this.page
-      this.drawPie(this.piedata)
-      this.clickPie()
-    },
-    piedata: {
-      deep: true,
-      handler: function (newval, oldval) {
-        if (newval) {
-          this.drawPie(this.niandu)
-        } else {
-          this.drawPie(this.weihu)
-        }
-      }
+       if (this.$route.path == '/index') {
+      this.com_name = 'eDialog'
+    } else if (this.$route.path == '/index/无线网概览') {
+      this.com_name = 'eDialogschool'
+    } else {
+      this.com_name = 'eDialogschool'
     }
+    },
+    // piedata: {
+    //   deep: true,
+    //   handler: function (newval, oldval) {
+    //     if (newval) {
+    //       this.drawPie(this.niandu)
+    //     } else {
+    //       this.drawPie(this.weihu)
+    //     }
+    //   }
+    // }
   },
   methods: {
   // 河南省投入产生比
@@ -215,10 +206,6 @@ export default {
                that.srdata.push(res.msg[i].sr)//产出
              that.trccdata.push(res.msg[i].trccb)
              }
-            //  console.log(that.touruNum)
-            //  console.log(that.years)
-            //  console.log(that.tzdata)
-            //  console.log(that.srdata)
            that.drawLine()
          })
     },
@@ -281,27 +268,13 @@ export default {
                 var yhss = (res.msg.yhs/10000).toFixed(2)   
                for (var i = 0; i <res.msg.yhsList.length; i++) {
                      that.suur.push((res.msg.yhsList[i]/10000).toFixed(2))
-                // console.log(sxc)      
                 }
-              // console.log(that.suur) 
              that.chans.push({"arpu":res.msg.arpu,"tzhsq":res.msg.tzhsq,"yhs":yhss})   
              that.arpuLists.push({"arpuList":res.msg.arpuList},{"tzhsqList":res.msg.tzhsqList},{"yearList":that.suur})  
-            //  that.tzhsqLists.push({"tzhsqList":res.msg.tzhsqList})
-            //  that.yearLists.push({"yearList":res.msg.yearList})
-              //  that.arpuLists={"arpuList":res.msg.arpuList}
              that.dats.push(res.msg.yearList)
-            //  console.log(that.dats) 
-            //  that.drawPie1(name)
-             
            })
       },
     back() {
-      // if (this.$route.path == '/index/无线网概览/network') {
-      //   this.piedata = pieData.network
-      // } else {
-      //  // this.piedata = pieData.sumdata
-      //    this.piedata = this.binchan
-      // }
         this.drawPie(this.binchan)
         this.pietitle = '总投入',
         this.pieheader = ''
@@ -323,40 +296,6 @@ export default {
       this.$set(this.touruNum[4], 'value', e * 10000)
       this.$set(this.chanchu[4], 'value', this.randomFrom(this.chanchu[3] * 0.8, this.chanchu[3] * 1.5))
       this.drawLine()
-    },
-    change(val) {
-      const allValues = this.options.map(item => {
-        return item.value;
-      });
-      // 用来储存上一次选择的值，可进行对比
-      const oldVal = this.oldChooseData.length > 0 ? this.oldChooseData : [];
-
-      // 若选择全部
-      if (val.includes('ALL_SELECT')) {
-        this.chooseData = allValues;
-      }
-
-      // 取消全部选中， 上次有， 当前没有， 表示取消全选
-      if (oldVal.includes('ALL_SELECT') && !val.includes('ALL_SELECT')) {
-        this.chooseData = [];
-      }
-
-      // 新老数据都有全部选中,那就说明除了全选以外的被选择，所以去掉全选
-      if (oldVal.includes('ALL_SELECT') && val.includes('ALL_SELECT')) {
-        const index = val.indexOf('ALL_SELECT');
-        val.splice(index, 1); // 排除全选选项
-        this.chooseData = val;
-      }
-
-      // 全选未选，但是其他选项都全部选上了，则全选选上
-      if (!oldVal.includes('ALL_SELECT') && !val.includes('ALL_SELECT')) {
-        if (val.length === allValues.length - 1) {
-          this.chooseData = ['ALL_SELECT'].concat(val);
-        }
-      }
-      // 储存当前选择的最后结果 作为下次的老数据
-      this.oldChooseData = this.chooseData;
-
     },
     drawPie(piedata) {
       var that = this;
@@ -501,7 +440,6 @@ export default {
       EleResize.on(dom, lestener)
     },
     clickPie() {
-      console.log(1)
       var that = this;
       // 处理点击事件并且跳转到相应的百度搜索页面
       this.chart.on('click', function (param) {
@@ -525,10 +463,7 @@ export default {
       });
     },
     drawLine() {
-      // var category = ['2015', '2016', '2017', '2018', '2019'];
      var category =this.years
-
-      // console.log(this.years)
       var dottedBase = [];
       var lineData = this.tzdata;//投入
       var barData = this.srdata;//产出
@@ -839,7 +774,7 @@ export default {
     posimgs1() {
       var da = this.da, a0 = this.a0;
       var centerx = 100, centery = 68, r = 68;
-      for (var i = 0; i < 3; i++) {
+      for (var i = 0; i < $('.oimg').length; i++) {
         $('.oimg')[i].style.left = centerx + r * Math.cos((da * i + a0) / 180 * Math.PI) + "px";
         $('.oimg')[i].style.top = centery + r * Math.sin((da * i + a0) / 180 * Math.PI) + "px";
       }

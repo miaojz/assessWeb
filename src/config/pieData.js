@@ -45,6 +45,42 @@ const pieData={
             {value:22,name:'电费',check:false,secondName:''},
             {value:22,name:'油机发电服务费',check:false,secondName:''},
             {value:22,name:'维护费',check:false,secondName:''},
+      ],
+      governmentSchoolSum:[
+        {name:'建设投入',value:66,check:true,secondName:'schooljianshe'},
+        {name:'运营投入',value:66,check:true,secondName:'schoolyuying'}
+      ],
+      schooljianshe:[
+        {name:'接入以上投入',value:66,check:true,secondName:'jieruyishang'},
+        {name:'接入投入',value:66,check:true,secondName:'jieru'},
+        {name:'平台投入',value:66,check:true,secondName:'pingtai'}
+      ],
+      jieruyishang:[
+        {name:'接入以上投入',value:66,check:false,secondName:''},
+      ],
+      jieru:[
+        {name:'接入光缆长度',value:66,check:false,secondName:''},
+        {name:'接入光缆投资',value:66,check:false,secondName:''},
+        {name:'OUN设备数量',value:66,check:false,secondName:''},
+        {name:'OUN设备型号',value:66,check:false,secondName:''},
+        {name:'OUN投资',value:66,check:false,secondName:''},
+      ],
+      pingtai:[
+        {name:'信息化平台',value:66,check:false,secondName:''},
+        {name:'集聚类设备投资',value:66,check:false,secondName:''},
+        {name:'其他',value:66,check:false,secondName:''},
+      ],
+      schoolyuying:[
+        {name:'年度人力投资',value:66,check:true,secondName:'jiandu'},
+        {name:'配套投资',value:66,check:true,secondName:'peitao'},
+      ],
+      jiandu:[
+        {name:'人工费',value:66,check:false,secondName:''},
+      ],
+      peitao:[
+        {name:'光缆维护',value:66,check:false,secondName:''},
+        {name:'机房维护',value:66,check:false,secondName:''},
+        {name:'电力消耗',value:66,check:false,secondName:''},
       ]
 }
 export default pieData

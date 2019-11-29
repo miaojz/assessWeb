@@ -42,15 +42,11 @@ export default {
     this.maaptop()
     this.ditumap()
     //获取store。js {{this.$store.state.date}}
-    console.log(this.$store.state.date)
+    //console.log(this.$store.state.date)
   },
   watch: {
     $route(to, from) {
-      if (this.$route.path == '/') {
-        this.page = ''
-      } else {
-        this.page = to.params.id.replace('概览', '');
-      }
+      
     }
   },
   methods: {
@@ -63,14 +59,14 @@ export default {
           // year:"2018",
           dataType: 'json'
            }).then(function(res){
-             console.log('jjj')
-             console.log(res)
+            //  console.log('jjj')
+            //  console.log(res)
             //  console.log($data.stop)
             //  this.stop=res.msg[0].trccb
           //  console.log(this.data.stop)   
-            console.log(res.msg[0].trccb)
+            // console.log(res.msg[0].trccb)
            that.stop =res.msg[0].trccb
-           console.log(that.stop)
+          //  console.log(that.stop)
          })
       },//地图
         ditumap(){
@@ -84,14 +80,14 @@ export default {
                console.log(res)
         for (var i = 0; i < res.msg.length; i++) {
           that.quyu.push(res.msg[i])
-          console.log(that.quyu)
+          //console.log(that.quyu)
         
            }
               that.quyu.map((value,key,arry)=>{
            that.data1.push({'name': value.city, 'value': value.trccb })
            
          })
-         console.log(that.data1)
+        // console.log(that.data1)
            that.drawMap()
         })
       },
@@ -180,7 +176,7 @@ export default {
           },
           formatter: function (params) {
             var tipHtml = ''; var data = '', rate = ''
-            console.log(params)
+           // console.log(params)
             tipHtml = '<div style="width:200px;height:100px;background:rgba(22,80,158,0.8);border:1px solid rgba(7,166,255,0.7)">'
               + '<div style="width:80%;height:40px;line-height:40px;border-bottom:2px solid rgba(7,166,255,0.7);padding:0 20px">' + '<i style="display:inline-block;width:8px;height:8px;background:#16d6ff;border-radius:40px;">' + '</i>'
               + '<span style="margin-left:10px;color:#fff;font-size:16px;">' + params.name + '</span>' + '</div>'

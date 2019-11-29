@@ -38,26 +38,26 @@
           <el-card class="height">
             <div slot="header" class="clearfix">
               <span class="cardHead">
-                <i class="el-icon-s-management"></i>产出
+                <i class="el-icon-s-management"></i>
+                <span @click="backLine" class="back">产出</span>
+                <span>{{Lineheader}}</span>
               </span>
             </div>
-            <div class="cont flexbox">
-              <div :class='["flex",pieActive==0 ? "active" : ""]' @click="pieActive=0">
-                <p>回报周期(月)</p>
+             <div class="height" id="div1" v-show='secondLine'>
+              <div class="oimg" @mouseover="stop" @mouseout="start()" @click="secondClick('回本周期')">
                 <p>36</p>
+                <p>回本周期</p>
               </div>
-              <div class="contLine"></div>
-              <div :class='["flex",pieActive==1 ? "active" : ""]' @click="pieActive=1">
-                <p>ARPU(万元)</p>
+              <div class="oimg" @mouseover="stop" @mouseout="start()" @click="secondClick('arpu')">
                 <p>36</p>
+                <p>arpu(万)</p>
               </div>
-              <div class="contLine"></div>
-              <div :class='["flex",pieActive==2 ? "active" : ""]' @click="pieActive=2">
+              <div class="oimg" @mouseover="stop" @mouseout="start()" @click="secondClick('用户数')">
+                <p>36</p>
                 <p>用户数(万)</p>
-                <p>36</p>
               </div>
             </div>
-            <div id="pie1"></div>
+            <div class='height' id='pie1' v-show='!secondLine'></div>
           </el-card>
         </el-col>
       </el-row>
@@ -90,7 +90,7 @@ export default {
       oldChooseData: [],
       show: false,
       title: '无线网',
-      piedata: pieData.sumdata,
+      piedata: [],
       pietitle: '总投入',
       pieheader: '',
       touruNum: [177133, 169043, 156670, 123908, 61954],
@@ -118,50 +118,52 @@ export default {
       }],
       sumNum: 100,
       myPie: null,
-      timer:null,
-      centerx : 120, //圆心X
-      centery :60, //圆心Y
-       r : 60, //半径
-      cnt : 3, //图片数
-      da : 120, //图片间隔角度
-      a0 : 0, //已旋转角度,
-      pieActive:0
+      pieActive:0,
+      secondLine:true,
+      da: 120, //图片间隔角度
+      a0: 0, //已旋转角度,
+      Lineheader:''
     }
   },
   created() { },
   mounted() {
-    if (this.$route.path == '/' || this.$route.path == '/index/投资收益评估概览') {
-      this.com_name = 'eDialog'
-    } else if (this.$route.path == '/index/无线网概览') {
-      this.com_name = 'eDialogschool'
-      this.piedata = pieData.network
-    } else {
-      this.com_name = 'eDialogschool'
-    }
-    //旋转运动
-    this.$nextTick(()=>{
+     //旋转运动
+    this.$nextTick(() => {
       this.chart = this.$echarts.init(document.getElementById('pie'));//获取容器元素
-      this.drawLine()
-      this.drawPie(this.piedata)
-      this.clickPie()
-      this.title = this.page
-      this.drawPie1()
-    })
-    
-  },
-  watch: {
-    $route(to, from) {
-      this.piedata = pieData.sumdata
-      if (this.$route.path == '/' || this.$route.path == '/index/投资收益评估概览') {
+      if (this.$route.path == '/index' || this.$route.path == '/index/投资收益评估概览') {
         this.com_name = 'eDialog';
         this.page = '';
       } else if (this.$route.path == '/index/无线网概览') {
         this.piedata = pieData.network
         this.com_name = 'eDialogschool'
-        this.page = to.params.id.replace('概览', '');
-      } else {
+      } else if(this.$route.path=='/index/governmentSchool'){
         this.com_name = 'eDialogschool'
-        this.page = to.params.id.replace('概览', '');
+        this.piedata = pieData.governmentSchoolSum
+      }else{
+        this.com_name = 'eDialogschool'
+      }
+      this.drawLine()
+      this.drawPie(this.piedata)
+      this.clickPie()
+      this.title = this.page
+      this.start()
+    })
+  },
+  watch: {
+    $route(to, from) {
+      this.piedata = pieData.sumdata
+      if (this.$route.path == '/index' || this.$route.path == '/index/投资收益评估概览') {
+        this.com_name = 'eDialog';
+        this.page = '';
+      } else if (this.$route.path == '/index/无线网概览') {
+        this.piedata = pieData.network
+        this.com_name = 'eDialogschool'
+      } else if(this.$route.path=='/index/governmentSchool'){
+        alert(1)
+        this.com_name = 'eDialogschool'
+        this.piedata = pieData.governmentSchoolSum
+      }else{
+        this.com_name = 'eDialogschool'
       }
       this.title = this.page
       this.drawPie(this.piedata)
@@ -182,7 +184,9 @@ export default {
     back() {
       if (this.$route.path == '/index/无线网概览') {
         this.piedata = pieData.network
-      } else {
+      } else if(this.$route.path == '/index/governmentSchool'){
+        this.piedata = pieData.governmentSchoolSum
+      }else{
         this.piedata = pieData.sumdata
       }
       this.pietitle = '总投入',
@@ -206,47 +210,12 @@ export default {
       this.$set(this.chanchu[4], 'value', this.randomFrom(this.chanchu[3] * 0.8, this.chanchu[3] * 1.5))
       this.drawLine()
     },
-    change(val) {
-      const allValues = this.options.map(item => {
-        return item.value;
-      });
-      // 用来储存上一次选择的值，可进行对比
-      const oldVal = this.oldChooseData.length > 0 ? this.oldChooseData : [];
-
-      // 若选择全部
-      if (val.includes('ALL_SELECT')) {
-        this.chooseData = allValues;
-      }
-
-      // 取消全部选中， 上次有， 当前没有， 表示取消全选
-      if (oldVal.includes('ALL_SELECT') && !val.includes('ALL_SELECT')) {
-        this.chooseData = [];
-      }
-
-      // 新老数据都有全部选中,那就说明除了全选以外的被选择，所以去掉全选
-      if (oldVal.includes('ALL_SELECT') && val.includes('ALL_SELECT')) {
-        const index = val.indexOf('ALL_SELECT');
-        val.splice(index, 1); // 排除全选选项
-        this.chooseData = val;
-      }
-
-      // 全选未选，但是其他选项都全部选上了，则全选选上
-      if (!oldVal.includes('ALL_SELECT') && !val.includes('ALL_SELECT')) {
-        if (val.length === allValues.length - 1) {
-          this.chooseData = ['ALL_SELECT'].concat(val);
-        }
-      }
-
-      // 储存当前选择的最后结果 作为下次的老数据
-      this.oldChooseData = this.chooseData;
-
-    },
     drawPie(piedata) {
       var that = this;
       var colorList = ['#6990D5', '#FF7F50', '#3feed4', '#00d488', '#afa3f5', '#f1bb4c', "#6A9DFF", '#ffc257', 'rgba(5, 65, 110, 1)', '#3bafff', '#ffedcc', '#fd6f97', '#fed4e0', '#a181fc', '#115dab', '#e3d9fe'];
       var option = {
         title: {
-          subtext: that.pietitle,
+          subtext: '总投入',
           x: '42%',
           y: '42%',
           textStyle: {
@@ -313,11 +282,11 @@ export default {
                 formatter: function (params) {
                   var str = '';
                   var rate = (Number(params.value) / Number(that.sumNum)) * 100//\n
-                  str = '{nameStyle|' + params.name + ' }' + '{rate|' + params.value + '亿}';
+                  str = '{nameStyle|' + params.name + ' }\n' + '{rate|' + params.value + '亿}';
                   return str
                 },
                 padding: [0, -96],
-                height: 30,
+                height: 60,
                 rich: {
                   nameStyle: {
                     fontSize: 11,
@@ -378,27 +347,17 @@ export default {
       EleResize.on(dom, lestener)
     },
     clickPie() {
-      console.log(1)
       var that = this;
-      // 处理点击事件并且跳转到相应的百度搜索页面
-      this.chart.on('click', function (param) {
-        console.log(param)
+      that.chart.on('click', function (param) {
         var name = param.name;
         if (param.data.check) {
-          that.pietitle = name;
-          that.pieheader = ' > ' + name
+          that.pieheader += ' > ' + name
           var second = param.data.secondName
-          that.piedata = pieData[second]
+          that.piedata = pieData[second];
+           that.drawPie(that.piedata)
         } else {
           that.$message.error('已经到最底层了');
         }
-        // if (name === '待摊投资') {
-        //   that.piedata = that.daitan
-        // } else if (name === '设备投资') {
-        //   that.piedata = that.shebei
-        // } else if (name === '建安投资') {
-        //   that.piedata = that.jianan
-        // }
       });
     },
     drawLine() {
@@ -604,82 +563,19 @@ export default {
       }
       EleResize.on(dom, lestener)
     },
-    randomFrom(lowerValue, upperValue) {
-      return Math.floor(Math.random() * (upperValue - lowerValue + 1) + lowerValue);
-    },
-    posimgs1() {
-      var da=this.da,a0=this.a0;
-      var centerx=120,centery=80,r=80;
-      for(var i=0;i<3;i++){
-          $('.oimg')[i].style.left = centerx + r * Math.cos((da * i + a0) / 180 * Math.PI) + "px";
-          $('.oimg')[i].style.top = centery + r * Math.sin((da * i + a0) / 180 * Math.PI) + "px";
-        }
-    },
-    posimgs() {
-      var dotLeft = ($("#div1").width())/2;
-      //中心点纵坐标
-      var dotTop = ($("#div1").height())/2;
-      //椭圆长边
-      var a = 140;
-      //椭圆短边
-      var b = 60;
-      //起始角度
-      var stard = 0;
-      //每一个BOX对应的角度;
-      var avd = 360/$(".oimg").length;
-      //每一个BOX对应的弧度;
-      var ahd = avd*Math.PI/180;
-      //运动的速度
-      var speed = this.a0;
-      //图片的宽高
-      var wid = 110;
-      var hei = 110;
-      //总的TOP值
-      var totTop = dotTop+100;
-      //设置圆的中心点的位置
-      $(".dot").css({"left":dotLeft,"top":dotTop});
-      speed = speed<360?speed:2;
-        //运运的速度
-        //speed+=2;
-			//运动距离，即运动的弧度数;
-      var ainhd = speed*Math.PI/180;
-      for(var index=0;index<3;index++){
-         var allpers = (Math.cos((ahd*index+ainhd))*b+dotTop)/totTop;
-         var wpers = Math.max(0.1,allpers);
-         var hpers = Math.max(0.1,allpers);
-         $('.oimg')[index].style.left = Math.sin((ahd*index+ainhd))*a+dotLeft-20 + "px";
-         $('.oimg')[index].style.top = Math.cos((ahd*index+ainhd))*b+dotTop-60 + "px";
-          $('.oimg')[index].style.zIndex=Math.ceil(allpers*10);
-          $('.oimg')[index].style.width=wpers*wid+'px';
-          $('.oimg')[index].style.height=hpers*hei+'px';
-          $('.oimg')[index].style.opacity=allpers+0.2;
-          $('.oimg')[index].style.fontSize=18*allpers+'px';
-          $('.oimg')[index].style.lineHeight=hpers*hei/2.5+'px';
-        }
-    },
-    start() {
-      var that=this
-        const timer = window.setInterval(function(){
-          that.posimgs();
-          that.a0++
-        },100);
-         that.timer=timer
-        that.$once('hook:beforeDestroy', () => {            
-          clearInterval(that.timer);                                    
-      })
-    },
-    stop() {
-        window.clearInterval(this.timer);
-    },
-    drawPie1() {
+    drawPie1(name) {
       var option = {
         grid: {
           top: "15%",
           bottom: "15%",
-          left: "1%",
-          right: "1%",
+          left: "10%",
+          right: "6%",
         },
         tooltip:{ trigger: 'axis',},
+        legend:{
+            show:true,
+            data:[name]
+          },
         xAxis: {
           data: [
             "2015",
@@ -702,17 +598,33 @@ export default {
               fontSize: "12",
             },
           },
+          boundaryGap:0
         },
         yAxis: [
           {
-            show: false,
+            show: true,
             type: "value",
-            
+            axisLine: {
+              show: false, //隐藏轴线
+            },
+            splitLine:{
+               show: false, //隐藏轴线
+            },
+            axisTick: {
+              show: false, //隐藏轴刻度
+            },
+            axisLabel: {
+              show: true,
+              textStyle: {
+                color: "#666", //文字颜色
+                fontSize: "12",
+              },
+            },
           },
         ],
         series: [
           {
-            name: "回报周期",
+            name: name,
             type: "line",
             smooth: true, //平滑曲线显示
             showAllSymbol: false, //显示所有图形。
@@ -747,7 +659,7 @@ export default {
         ],
       }
       this.myPie = this.$echarts.init(document.getElementById('pie1'));//获取容器元素
-      this.myPie.setOption(option);
+      this.myPie.setOption(option,true);
       var dom = document.getElementById('pie1')
       var that = this;
       let lestener = function () {
@@ -756,15 +668,69 @@ export default {
       EleResize.on(dom, lestener)
 
     },
-  },
-  
-// destroyed() {
-//   window.clearInterval(this.timer);
-// }
+    randomFrom(lowerValue, upperValue) {
+      return Math.floor(Math.random() * (upperValue - lowerValue + 1) + lowerValue);
+    },
+    posimgs1() {
+      var da = this.da, a0 = this.a0;
+      var centerx = 100, centery = 68, r = 68;
+      for (var i = 0; i <  $('.oimg').length; i++) {
+        $('.oimg')[i].style.left = centerx + r * Math.cos((da * i + a0) / 180 * Math.PI) + "px";
+        $('.oimg')[i].style.top = centery + r * Math.sin((da * i + a0) / 180 * Math.PI) + "px";
+      }
+    },
+    start() {
+      var that = this;
+      const timer = window.setInterval(function () {
+        that.posimgs1();
+        that.a0++
+      }, 200);
+      that.timer=timer
+      that.$once('hook:beforeDestroy', () => {            
+          clearInterval(timer);                                    
+      })
+    },
+    stop() {
+      window.clearInterval(this.timer);
+    },
+    secondClick(type){
+      this.secondLine=!this.secondLine;
+      this.$nextTick(() => {
+        this.drawPie1(type)
+        this.stop()
+        console.log(type)
+        this.Lineheader=' > '+type
+      })
+      
+    },
+    backLine(){
+      this.secondLine=true;
+      this.$nextTick(() => {
+          this.start()
+          this.Lineheader=''
+        })
+    }
+  }
 }
 </script>
 
 <style lang="less" scoped>
+.contain {
+  width: 99%;
+  height: 91%;
+  margin: 0 10px;
+  box-sizing: border-box;
+  .el-row {
+    width: 100%;
+    height: 100%;
+    &:last-child {
+      margin-bottom: 0;
+    }
+    .el-col {
+      height: 100%;
+    }
+  }
+}
 .rightBottom {
   width: 100%;
   height: 48%;
@@ -808,99 +774,37 @@ export default {
     background-color: #ddd;
   }
 }
-#pie1 {
-  width: 100%;
-  height: 80%;
-  position: relative;
-}
+
 .pieT .el-card__body {
   padding: 0;
 }
-#div1{
+#div1 {
   position: relative;
-   background: url('../assets/image/bg.png') no-repeat center center;
-    background-size: 80% 80%;
-  >div{
+  background: url("../assets/image/bg1.png") no-repeat center center;
+  background-size: 80% 100%;
+  > div {
     position: absolute;
-    width: 120px;
-    height:120px;
+    width: 100px;
+    height: 100px;
     text-align: center;
-     background: url('../assets/image/circle.png') no-repeat;
-     background-size: 100% 100%;
-    >p:nth-child(1){
-      color:#fff;
+    background: url("../assets/image/circle.png") no-repeat;
+    background-size: 100% 100%;
+    > p:nth-child(1) {
+      color: #fff;
       font-size: 2em;
-      margin-top:10px
-    }
-    >p:nth-child(2){
-      // margin-top:5px
+      line-height: 60px;
     }
   }
-  >div:nth-child(1){
-     background: url('../assets/image/circle1.png') no-repeat;
-     background-size: 100% 100%;
+  > div:nth-child(1) {
+    background: url("../assets/image/circle1.png") no-repeat;
+    background-size: 100% 100%;
   }
-   >div:nth-child(2){
-     background: url('../assets/image/circle2.png') no-repeat;
-     background-size: 100% 100%;
+  > div:nth-child(2) {
+    background: url("../assets/image/circle2.png") no-repeat;
+    background-size: 100% 100%;
   }
 }
-/* 圆环样式  */
-.wrap{
-	background-color:#F2F7FF;
-	position: relative; 
-  width: 100%; 
-  height: 100%; 
-	border-radius: 50%;
-	.circle{
-		box-sizing: border-box; 
-		border: 1px solid #F2F7FF; 
-		clip:rect(0, 94px, 94px, 47px);
-		position: absolute; 
-		width: 100%; 
-		height: 100%; 
-		border-radius: 50%;
-		.percent{
-			box-sizing: border-box;  
-			top:-1px; left:-1px;
-			position: absolute; 
-			width: 100%; 
-			height: 100%; 
-			border-radius: 50%;
-		}
-		.left{
-			border: 20px solid #3C8CFF; 
-			clip: rect(0, 47px,94px,0);
-		} 
-		.right{
-			border: 20px solid #3C8CFF; 
-			clip: rect(0, 47px, 94px, 47px);
-		}
-		.wth0{width:0;}
-	}
-	.clip-auto{
-		clip:rect(auto, auto, auto, auto);
-	}
-	.inside-round {
-		position: absolute;
-		width: 80%;
-		height: 80%;
-		background: #fff;
-		border-radius: 50%;
-		top: 0;
-		left: 0;
-		right: 0;
-		bottom: 0;
-		margin: auto;
-		text-align: center;
-    line-height: 35px;
-    >p:nth-child(1){
-      font-size:12px;
-    }
-    >p:nth-child(2){
-      font-size:16px;
-    }
-	}
+.cardHead span{
+  cursor: pointer;
 }
-
 </style>

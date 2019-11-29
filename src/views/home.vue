@@ -16,7 +16,7 @@
             <div class="mainRight">
               <div>
                 <span>项目：</span>
-                <el-cascader :options="options" size="mini" @change="change" clearable></el-cascader>
+                <el-cascader :options="options" ref="cascaderAddr" size="mini" @change="change" clearable></el-cascader>
               </div>
               <div>
                 <span>时间：</span>
@@ -49,6 +49,7 @@ import Vue from 'vue'
 import Header from '../components/head'
 import Menu from '../components/menu'
 import county from '@/config/countyData'
+import schoolData from '@/config/schoolData'
 // import { api1 } from '@/core/net/http'// 导入我们的api接口
 export default {
   name: 'app',
@@ -60,6 +61,9 @@ export default {
       xm: '',
       second: '',
       selectData: [{
+        value: '2014',
+        label: '2014'
+      }, {
         value: '2015',
         label: '2015'
       }, {
@@ -71,9 +75,6 @@ export default {
       }, {
         value: '2018',
         label: '2018'
-      }, {
-        value: '2019',
-        label: '2019'
       }],
       value: '',
       path:'',
@@ -88,8 +89,16 @@ export default {
   methods: {
     change(data) {
       var len = data.length - 1;
-      //var arr = ['无线网概览', '室分', '宏站', '专线', '校园', 'CICT', '政企概览', '接入网概览', '家庭宽带']
       this.to('/index' + data[len])
+      var label=this.$refs.cascaderAddr.getCheckedNodes()[0].label;
+      if(this.$route.params.id){
+        this.show = false;
+        this.page=label;
+      }
+      var data=JSON.stringify(schoolData[label])
+      if(data!=undefined){
+          this.$store.commit('changeSchool',data)
+      }
     },
     to(e) {
       window.scrollTo(0, 0)
@@ -106,42 +115,42 @@ export default {
   watch: {
     //监听路由变化，自动缩减左边菜单栏目
     $route(to, form) {
-      var realList=this.$route.matched
-      console.log(this.$route)
-      var arr=[];
-      this.realList.map(item=>{
-          var obj={
-            name:item.name,
-            path:item.path
-          }
-          arr.push(obj)
-      })
-      this.$store.commit('changeBreadcrumb',arr)
-      if(this.$route.params.id){
-        this.realList=this.$store.state.breadcrumbData;
-        this.page=this.$route.params.id
-      }else{
-        this.realList=this.$route.matched
-        this.page=''
-      }
+     this.realList=this.$route.matched
+      console.log(this.$route.matched)
+      // var arr=[];
+      // realList.map(item=>{
+      //     var obj={
+      //       name:item.name,
+      //       path:item.path
+      //     }
+      //     arr.push(obj)
+      // })
+      //this.$store.commit('changeBreadcrumb',JSON.stringify(realList))
       if (this.$route.path == '/index') {
         this.show = true;
+        console.log('true')
       } else {
         this.show = false;
       }
     }
   },
   mounted() {
-    var realList
-    if(this.$store.state.breadcrumbData){
-          realList=this.$route.matched
-    }else{
-        realList=JSON.parse(localStorage.getItem('breadcrumbData'))
-    }
+    var realList=this.$route.matched
+    // if(this.$store.state.breadcrumbData.length>0){
+    //       realList=this.$store.state.breadcrumbData
+    // }else{
+    //     realList=JSON.parse(localStorage.getItem('breadcrumbData'))
+    // }
     this.realList=realList;
-    this.page=''
+    this.show = false;
+    console.log(this.$route.matched)
     if(this.$route.params.id){
         this.show = false;
+        this.page=this.$route.params.id;
+        console.log(this.$route.params.id)
+      }else{
+        this.page='';
+     // this.show = true;
       }
     // this.$post('/api/index/line',{}).then(res=>{
     //   console.log(res)
