@@ -145,7 +145,7 @@ export default {
   },
   created() { },
   mounted() {
-    if (!this.$store.state.city) this.city = localStorage.getItem(city)
+    if (!this.$store.state.city) this.city = localStorage.getItem('city')
     this.linne()
     this.chanchus()
     this.bingtutr()
@@ -451,7 +451,7 @@ export default {
           //that.piedata = that[second]
           that.drawPie(that[second])
         } else {
-          that.$message.error('已经到最底层了');
+          //that.$message.error('已经到最底层了');
         }
         // if (name === '待摊投资') {
         //   that.piedata = that.daitan

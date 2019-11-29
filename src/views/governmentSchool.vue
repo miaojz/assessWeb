@@ -86,7 +86,7 @@ export default {
       // 最大值 4
       var max = Math.max.apply(Math, data.map(item => { return item.value })) + 20
       // 最小值 1
-      var min = Math.min.apply(Math, data.map(item => { return item.value })) - 20
+      var min = 0
       var option = {
         tooltip: {
           padding: 0,
@@ -139,7 +139,7 @@ export default {
               show: false,
             }
           },
-          roam: true,
+          //roam: true,
           itemStyle: {
             normal: {
               areaColor: '#023677',
@@ -183,7 +183,7 @@ export default {
         ]
       };
       this.chart=this.$echarts.init(document.getElementById('map'))
-      this.chart.setOption(option);
+      this.chart.setOption(option,true);
       var dom = document.getElementById('map');
       var that = this;
       let lestener = function () {
@@ -198,8 +198,9 @@ export default {
         var name = param.name;
         var city = name.slice(0, name.length - 1)
         that.drawMap(city)
-        that.$store.commit('changeCity', city)
         that.city = city
+        that.$store.commit('changeCity', city)
+        
       });
     },
     mapback() {

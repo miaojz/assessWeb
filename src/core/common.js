@@ -438,7 +438,12 @@ class common {
     }
     sfChartLine(obj) {
         var option = {
-            tooltip: {},
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: { // 坐标轴指示器，坐标轴触发有效
+                    type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+                }
+            },
             legend: {
                 data: obj.xdata,
                 x: 'center'
@@ -646,7 +651,12 @@ class common {
     sfChartRate(data) {
         var dianXinYongHu = data
         var option = {
-            tooltip: {},
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: { // 坐标轴指示器，坐标轴触发有效
+                    type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+                }
+            },
             legend: {
                 data: ['投诉用户数'],
                 x: 'center'

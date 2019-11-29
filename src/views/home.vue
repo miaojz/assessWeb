@@ -68,7 +68,7 @@ export default {
     return {
       page: '',
       show: true,
-      options: county,
+      options: [],
       xm: '',
       second: '',
       selectData: [{
@@ -100,7 +100,6 @@ export default {
   methods: {
     change(data) {
       var len = data.length - 1;
-      this.to('/index' + data[len])
       var label = this.$refs.cascaderAddr.getCheckedNodes()[0].label;
       if (this.$route.params.id) {
         this.show = false;
@@ -109,6 +108,11 @@ export default {
       var data1 = JSON.stringify(schoolData[label])
       if (data1 != undefined) {
         this.$store.commit('changeSchool', data1)
+      }
+      if(data.length==3){
+        this.to('/index' + data[len])
+      }else{
+         this.to('/empty')
       }
     },
     to(e) {
@@ -127,31 +131,31 @@ export default {
     //监听路由变化，自动缩减左边菜单栏目
     $route(to, form) {
       this.realList = this.$route.matched
-      console.log(this.$route.matched)
-      // var arr=[];
-      // realList.map(item=>{
-      //     var obj={
-      //       name:item.name,
-      //       path:item.path
-      //     }
-      //     arr.push(obj)
-      // })
-      //this.$store.commit('changeBreadcrumb',JSON.stringify(realList))
       if (this.$route.path == '/index') {
         this.show = true;
-        console.log('true')
       } else {
         this.show = false;
       }
+      if (this.$route.path == '/index/shifen'||this.$route.path.indexOf('sf')!=-1) {
+        this.options=county.shifen
+      } else{
+        this.options=county.network
+      }
+      if (this.$route.params.id) {
+      this.show = false;
+      this.page = this.$route.params.id;
+    } else {
+      this.page = '';
+    }
     }
   },
   mounted() {
     var realList = this.$route.matched
-    // if(this.$store.state.breadcrumbData.length>0){
-    //       realList=this.$store.state.breadcrumbData
-    // }else{
-    //     realList=JSON.parse(localStorage.getItem('breadcrumbData'))
-    // }
+    if (this.$route.path == '/index/shifen'||this.$route.path.indexOf('sf')!=-1) {
+        this.options=county.shifen
+      } else{
+        this.options=county.network
+      }
     this.realList = realList;
     this.show = false;
     console.log(this.$route.matched)
@@ -161,18 +165,7 @@ export default {
       console.log(this.$route.params.id)
     } else {
       this.page = '';
-      // this.show = true;
     }
-    // this.$post('/api/index/line',{}).then(res=>{
-    //   console.log(res)
-    // })
-    // api1({}).then(res => {
-    //   // success
-    //   console.log(res)
-    // }).catch((error) => {
-    //   // error
-    //   console.log(error)
-    // })
   }
 }
 </script>

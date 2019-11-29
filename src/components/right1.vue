@@ -45,15 +45,15 @@
             </div>
              <div class="height" id="div1" v-show='secondLine'>
               <div class="oimg" @mouseover="stop" @mouseout="start()" @click="secondClick('回本周期')">
-                <p>36</p>
+                <p>0</p>
                 <p>回本周期</p>
               </div>
               <div class="oimg" @mouseover="stop" @mouseout="start()" @click="secondClick('arpu')">
-                <p>36</p>
+                <p>0</p>
                 <p>arpu(万)</p>
               </div>
               <div class="oimg" @mouseover="stop" @mouseout="start()" @click="secondClick('用户数')">
-                <p>36</p>
+                <p>0</p>
                 <p>用户数(万)</p>
               </div>
             </div>
@@ -93,15 +93,15 @@ export default {
       piedata: [],
       pietitle: '总投入',
       pieheader: '',
-      touruNum: [177133, 169043, 156670, 123908, 61954],
-      newNum: [177133, 169043, 156670, 123908, { value: 321779.48,
+      touruNum: [0, 398.35, 1415.83, 1717.08, 1880.87],
+      newNum: [0, 0, 0, 0, { value: 0,
         itemStyle: {
           borderType: 'dotted',
           barBorderColor: '#ffdcc3',
           color: '#B49CDB'
         }
       }],
-      chanchu: [96083, 246140, 318999, 408068, {value: 521779.48,
+      chanchu: [0, 0, 0, 0, {value: 0,
         itemStyle: {
           borderType: 'dotted',
           barBorderColor: '#ffdcc3',
@@ -122,12 +122,15 @@ export default {
       secondLine:true,
       da: 120, //图片间隔角度
       a0: 0, //已旋转角度,
-      Lineheader:''
+      Lineheader:'',
+      second:''
     }
   },
   created() { },
   mounted() {
      //旋转运动
+     if (!this.$store.state.city) this.city = localStorage.getItem('city')
+     console.log(this.city)
     this.$nextTick(() => {
       this.chart = this.$echarts.init(document.getElementById('pie'));//获取容器元素
       if (this.$route.path == '/index' || this.$route.path == '/index/投资收益评估概览') {
@@ -138,7 +141,7 @@ export default {
         this.com_name = 'eDialogschool'
       } else if(this.$route.path=='/index/governmentSchool'){
         this.com_name = 'eDialogschool'
-        this.piedata = pieData.governmentSchoolSum
+        this.piedata = pieData.governmentSchoolSum[this.city]
       }else{
         this.com_name = 'eDialogschool'
       }
@@ -159,9 +162,8 @@ export default {
         this.piedata = pieData.network
         this.com_name = 'eDialogschool'
       } else if(this.$route.path=='/index/governmentSchool'){
-        alert(1)
         this.com_name = 'eDialogschool'
-        this.piedata = pieData.governmentSchoolSum
+        this.piedata = pieData.governmentSchoolSum[this.city]
       }else{
         this.com_name = 'eDialogschool'
       }
@@ -178,14 +180,34 @@ export default {
           this.drawPie(oldval)
         }
       }
+    },
+     city: {
+      deep: true,
+      handler: function (newval, oldval) {
+        var data
+       if(this.pieheader){
+          var second=this.second;
+          data=pieData[second][newval]
+       }else{
+         data=pieData.governmentSchoolSum[newval]
+       }
+          this.drawPie(data)
+      }
     }
   },
+  computed: {
+      city () {
+        var city=this.$store.state.city
+        if (!this.$store.state.city) city = localStorage.getItem('city')
+        return city;　　//需要监听的数据
+      }
+},
   methods: {
     back() {
       if (this.$route.path == '/index/无线网概览') {
         this.piedata = pieData.network
       } else if(this.$route.path == '/index/governmentSchool'){
-        this.piedata = pieData.governmentSchoolSum
+        this.piedata = pieData.governmentSchoolSum[this.city]
       }else{
         this.piedata = pieData.sumdata
       }
@@ -282,7 +304,7 @@ export default {
                 formatter: function (params) {
                   var str = '';
                   var rate = (Number(params.value) / Number(that.sumNum)) * 100//\n
-                  str = '{nameStyle|' + params.name + ' }\n' + '{rate|' + params.value + '亿}';
+                  str = '{nameStyle|' + params.name + ' }\n' + '{rate|' + params.value + '}';
                   return str
                 },
                 padding: [0, -96],
@@ -351,9 +373,10 @@ export default {
       that.chart.on('click', function (param) {
         var name = param.name;
         if (param.data.check) {
-          that.pieheader += ' > ' + name
+          that.pieheader = ' > ' + name
           var second = param.data.secondName
-          that.piedata = pieData[second];
+          this.second=second;
+          that.piedata = pieData[second][that.city];
            that.drawPie(that.piedata)
         } else {
           that.$message.error('已经到最底层了');
@@ -410,7 +433,7 @@ export default {
           }
         },
         legend: {
-          data: ['产出', '投入', '付现', '投入产出比',],
+          data: ['资本开支', '付现成本', '收入', '投入产出比',],
           textStyle: {
             color: '#333'
           },
@@ -419,7 +442,7 @@ export default {
         grid: {
           x: '10%',
           width: '82%',
-          y: '10%',
+          y: '12%',
           bottom: '12%'
         },
         xAxis: {
@@ -434,6 +457,7 @@ export default {
           },
         },
         yAxis: [{
+          name:'单位:万元',
           splitLine: { show: false },
           axisLine: {
             lineStyle: {
@@ -445,6 +469,7 @@ export default {
           }
         },
         {
+          name:'单位:%',
           splitLine: { show: false },
           axisLine: {
             lineStyle: {
@@ -497,7 +522,7 @@ export default {
             data: dot
           },
           {
-            name: '付现',
+            name: '付现成本',
             type: 'bar',
             barWidth: 12,
             itemStyle: {
@@ -515,12 +540,25 @@ export default {
             data: newData
           },
           {
-            name: '产出',
+            name: '资本开支',
             type: 'bar',
             barWidth: 12,
             itemStyle: {
               normal: {
                 barBorderRadius: 5,
+                color: 'rgb(215,215,215)'
+              }
+            },
+            data: barData
+          },
+          {
+            name: '收入',
+            type: 'bar',
+            barWidth: 12,
+            itemStyle: {
+              normal: {
+                barBorderRadius: 5,
+                //color: 'rgb(215,215,215)'
                 color: new this.$echarts.graphic.LinearGradient(
                   0, 0, 0, 1,
                   [
@@ -528,25 +566,6 @@ export default {
                     { offset: 1, color: '#3ab8f2' }
                   ]
                 )
-              }
-            },
-            data: barData
-          },
-          {
-            name: '投入',
-            type: 'bar',
-            barWidth: 12,
-            itemStyle: {
-              normal: {
-                barBorderRadius: 5,
-                color: 'rgb(215,215,215)'
-                // color: new this.$echarts.graphic.LinearGradient(
-                //   0, 0, 0, 1,
-                //   [
-                //     { offset: 0, color: '#F4C309' },
-                //     { offset: 1, color: '#F9E184' }
-                //   ]
-                // )
               }
             },
             data: lineData
