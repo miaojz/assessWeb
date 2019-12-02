@@ -88,8 +88,7 @@ export default {
       var obj = {
         xdata: ['电信用户', '投诉用户'],
         data0: this.schoolData.bar.dianXinUsers,
-        //data1: [100, 200, 409, 300, 430, 200, 350, 420, 450],
-        data2: this.schoolData.bar.touSuShuLiang,
+        data1: this.schoolData.bar.touSuShuLiang,
       }
       var option = this.$commonJS.sfChartLine(obj);
       var myChart = this.$echarts.init(document.getElementById('user'));//获取容器元素

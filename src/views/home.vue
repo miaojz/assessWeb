@@ -12,8 +12,7 @@
             <el-breadcrumb separator="/" v-else>
               <el-breadcrumb-item
                 v-for="(item,idx) in realList"
-                v-if="item.name"
-                :key="item.name+idx"
+                :key="'el'+idx"
                 :to="item.path"
               >{{item.name}}</el-breadcrumb-item>
               <el-breadcrumb-item :to="{ path: '/empty' }" v-if="page">{{page}}</el-breadcrumb-item>
@@ -87,7 +86,7 @@ export default {
         value: '2018',
         label: '2018'
       }],
-      value: '',
+      value: '2018',
       path: '',
       realList: []
 
@@ -109,10 +108,10 @@ export default {
       if (data1 != undefined) {
         this.$store.commit('changeSchool', data1)
       }
-      if(data.length==3){
+      if (data.length == 3) {
         this.to('/index' + data[len])
-      }else{
-         this.to('/empty')
+      } else {
+        this.to('/empty')
       }
     },
     to(e) {
@@ -126,46 +125,42 @@ export default {
     selectchange(value) {
       this.$store.dispatch('changeDate', value)
     },
+    initFun() {
+      if (this.$route.path == '/index/shifen' || this.$route.path.indexOf('sf') != -1 || this.$route.path.indexOf('jm') != -1) {
+        this.options = county.shifen
+      } else {
+        this.options = county.network
+      }
+      if (this.$route.params.id) {
+        this.show = false;
+        this.page = this.$route.params.id;
+      } else {
+        this.page = '';
+      }
+      var realList=this.$route.matched;
+      this.realList=[];var da=[]
+      realList.forEach(item=>{
+        if(item!=undefined&&item.name!=''){
+        da.push(item)
+        }
+      })
+       this.realList=da
+    }
   },
   watch: {
     //监听路由变化，自动缩减左边菜单栏目
     $route(to, form) {
-      this.realList = this.$route.matched
       if (this.$route.path == '/index') {
         this.show = true;
       } else {
         this.show = false;
       }
-      if (this.$route.path == '/index/shifen'||this.$route.path.indexOf('sf')!=-1) {
-        this.options=county.shifen
-      } else{
-        this.options=county.network
-      }
-      if (this.$route.params.id) {
-      this.show = false;
-      this.page = this.$route.params.id;
-    } else {
-      this.page = '';
-    }
+      this.initFun()
     }
   },
   mounted() {
-    var realList = this.$route.matched
-    if (this.$route.path == '/index/shifen'||this.$route.path.indexOf('sf')!=-1) {
-        this.options=county.shifen
-      } else{
-        this.options=county.network
-      }
-    this.realList = realList;
     this.show = false;
-    console.log(this.$route.matched)
-    if (this.$route.params.id) {
-      this.show = false;
-      this.page = this.$route.params.id;
-      console.log(this.$route.params.id)
-    } else {
-      this.page = '';
-    }
+    this.initFun()
   }
 }
 </script>

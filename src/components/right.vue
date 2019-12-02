@@ -43,17 +43,32 @@
                 <span>{{Lineheader}}</span>
               </span>
             </div>
-            <div class="height" id="div1" v-show="secondLine" v-for="item in chans" :key="item.id">
-              <div class="oimg" @mouseover="stop" @mouseout="start()" @click="secondClick('回本周期')">
-                <p>{{item.tzhsq}}</p>
-                <p>回本周期</p>
+            <div class="height" id="div1" v-show="secondLine">
+              <div
+                class="oimg"
+                @mouseover="stop"
+                @mouseout="start()"
+                @click="secondClick('year','年')"
+              >
+                <p>{{chans.year}}</p>
+                <p>回本周期(年)</p>
               </div>
-              <div class="oimg" @mouseover="stop" @mouseout="start()" @click="secondClick('arpu')">
-                <p>{{item.arpu}}</p>
+              <div
+                class="oimg"
+                @mouseover="stop"
+                @mouseout="start()"
+                @click="secondClick('arpu','元')"
+              >
+                <p>{{chans.arpu}}</p>
                 <p>arpu(元)</p>
               </div>
-              <div class="oimg" @mouseover="stop" @mouseout="start()" @click="secondClick('用户数')">
-                <p>{{item.yhs}}</p>
+              <div
+                class="oimg"
+                @mouseover="stop"
+                @mouseout="start()"
+                @click="secondClick('yhs','万')"
+              >
+                <p>{{chans.yhs}}</p>
                 <p>用户数(万)</p>
               </div>
             </div>
@@ -86,47 +101,32 @@ export default {
     return {
       page: this.$route.params.id,
       com_name: 'eDialog',
-      chooseData: [],
-      oldChooseData: [],
       show: false,
       title: '无线网',
       piedata: pieData.sumdata,
       pietitle: '总投入',
       pieheader: '',
-      touruNum: [],
       years: [],
       tzdata: [],
       srdata: [],
       trccdata: [],
       tourus: [],
-      // datas: [4, 4.3, 4.2, 4.5, 4.9, 4.8, 4, 3.8],
       dats: [],//日期
-      binchan: [],
-      weihu: [],
-      niandu: [],
-      // touruNum: [177133, 169043, 156670, 123908, 61954],
-      newNum: [177133, 169043, 156670, 123908, {        value: 321779.48,
-        itemStyle: {
-          borderType: 'dotted',
-          barBorderColor: '#ffdcc3',
-          color: '#B49CDB'
-        }
-      }],
-      chanchu: [96083, 246140, 318999, 408068, {        value: 521779.48,
-        itemStyle: {
-          borderType: 'dotted',
-          barBorderColor: '#ffdcc3',
-          color: new this.$echarts.graphic.LinearGradient(0, 0, 0, 1, [{
-            offset: 0.4,
-            color: "#fd6f97"
-          },
-          {
-            offset: 1,
-            color: "#ffdcc3"
-          }
-          ])
-        }
-      }],
+      binchan: [{ "check": true, "name": "投资合计", "secondName": "niandu", "value": 12.39 },
+      { "check": true, "name": "付现合计", "secondName": "weihu", "value": 0 }],
+      weihu: [{ "check": false, "name": "维护费", "secondName": "", "value": 0 },
+      { "check": false, "name": "铁塔租赁费", "secondName": "", "value": 0 },
+      { "check": false, "name": "油机发电费", "secondName": "", "value": 0 },
+      { "check": false, "name": "电费", "secondName": "", "value": 0 }],
+      niandu: [{ "check": false, "name": "4G相关平台", "secondName": "", "value": 0.14 },
+      { "check": false, "name": "4G基站", "secondName": "", "value": 8.84 },
+      { "check": false, "name": "4G核心网", "secondName": "", "value": 0.76 },
+      { "check": false, "name": "IPRan", "secondName": "", "value": 2.23 },
+      { "check": false, "name": "CN2", "secondName": "", "value": 0.29 },
+      { "check": false, "name": "传输", "secondName": "", "value": 0.12 }],
+      touruNum: [],
+      newNum: [],
+      chanchu: [],
       sumNum: 100,
       myPie: null,
       pieActive: 0,
@@ -134,41 +134,47 @@ export default {
       da: 120, //图片间隔角度
       a0: 0, //已旋转角度,
       Lineheader: '',
-      chans: [],
-      arpuLists: [],
-      tzhsqLists: [],
-      yearLists: [],
+      chans: { "arpu":0, "year": 0, "yhs": 0 },
+      chansLists: { arpu: [],yhs: [],xdata: [],year: []},
       suur: [],//产出换算媒介
-      commType: null, //产出类型
       city: this.$store.state.city,
     }
   },
   created() { },
+
   mounted() {
-    if (!this.$store.state.city) this.city = localStorage.getItem('city')
-    this.linne()
-    this.chanchus()
-    this.bingtutr()
-    //  this.bingtutr()
-    if (this.$route.path == '/index') {
-      this.com_name = 'eDialog'
-    } else if (this.$route.path == '/index/无线网概览') {
-      this.com_name = 'eDialogschool'
-    } else {
-      this.com_name = 'eDialogschool'
-    }
+    this.linne()//折线图
+    this.chanchus()//产出
+    this.bingtutr()//投入
+    this.initFun()//弹框初始化
     //旋转运动
     this.$nextTick(() => {
       this.chart = this.$echarts.init(document.getElementById('pie'));//获取容器元素
-      this.drawLine()
-      // this.drawPie(this.binchan)
       this.clickPie()
       this.title = this.page
+      this.binchan.sort((a, b) => { return b.value - a.value })//升序
+      this.weihu.sort((a, b) => { return b.value - a.value })//升序
+      this.niandu.sort((a, b) => { return b.value - a.value })//升序
+      this.drawPie(this.binchan)
       this.start()
     })
   },
   watch: {
     $route(to, from) {
+      this.initFun()
+    },
+    date(val) {
+      this.chanchus()
+      this.bingtutr()
+    }
+  },
+  computed: {
+    date: function () {
+      return this.$store.state.date
+    }
+  },
+  methods: {
+    initFun() {
       if (this.$route.path == '/index') {
         this.com_name = 'eDialog'
       } else if (this.$route.path == '/index/无线网概览') {
@@ -177,109 +183,71 @@ export default {
         this.com_name = 'eDialogschool'
       }
     },
-    // piedata: {
-    //   deep: true,
-    //   handler: function (newval, oldval) {
-    //     if (newval) {
-    //       this.drawPie(this.niandu)
-    //     } else {
-    //       this.drawPie(this.weihu)
-    //     }
-    //   }
-    // }
-  },
-  methods: {
     // 河南省投入产生比
     linne() {
       var that = this
-      this.$post('/api/index/line', {
+      var param = {
         pageType: "wireless",
-        city: "全省",
-        year: "year",
-        dataType: 'json'
-      }).then(function (res) {
-        console.log(res)
-        for (var i = 0; i < res.msg.length; i++) {
-          that.touruNum.push((res.msg[i].fx / 10000).toFixed(2))  //付现
-          that.years.push(res.msg[i].year)//日期
-          that.tzdata.push(res.msg[i].tz)//投入
-          that.srdata.push(res.msg[i].sr)//产出
-          that.trccdata.push(res.msg[i].trccb)
-        }
+        city:'全省'
+      }
+      this.$post('/api/index/line', param).then(function (res) {
+        that.touruNum = [], that.years = [], that.tzdata = [], that.srdata = [], that.trccdata = []
+        res.msg.forEach(item => {
+          that.touruNum.push((item.fx / 10000).toFixed(2))  //付现
+          that.years.push(item.year)//日期
+          that.tzdata.push(item.tz)//投资
+          that.srdata.push(item.sr)//收入
+          that.trccdata.push(item.trccb)//比例
+        })
+        that.years=Array.from(new Set(that.years));
         that.drawLine()
       })
     },
     // 投入请求
     bingtutr() {
       var that = this
-      this.$post('/api/index/pieIn', {
+      that.$post('/api/index/pieIn', {
         pageType: "wireless",
         city: "全省",
-        year: "2018",
-        dataType: 'json'
+        year: that.date,
       }).then(function (res) {
-        //  console.log(res)   
-
-        var tr_ndzbkz_tzhj = 0, tr_bnfxcb_whf = 0;
-        if (res.msg.tr_ndzbkz_tzhj) tr_ndzbkz_tzhj = (res.msg.tr_ndzbkz_tzhj / 1000).toFixed(2);
-        if (res.msg.tr_bnfxcb_whf) tr_ndzbkz_tzhj = res.msg.tr_bnfxcb_whf;
-        // console.log(tr_ndzbkz_tzhj)
-        that.binchan.push({ "check": true, "name": "投资合计", "secondName": "niandu", "value": tr_ndzbkz_tzhj },
-          { "check": true, "name": "付现合计", "secondName": "weihu", "value": tr_bnfxcb_whf })
-        // console.log(that.binchan)
-        
-      that.binchan.sort((a,b)=>{ return b.value-a.value})//升序
-        that.drawPie(that.binchan)
-        var tr_ndzbkz_tzhj = 0, tr_bnfxcb_whf = 0;
-        if (res.msg.tr_ndzbkz_tzhj) tr_ndzbkz_tzhj = res.msg.tr_ndzbkz_tzhj;
-        if (res.msg.tr_bnfxcb_whf) tr_ndzbkz_tzhj = res.msg.tr_bnfxcb_whf;
-        that.weihu.push({ "check": false, "name": "维护费", "secondName": "", "value": tr_bnfxcb_whf },
-          { "check": false, "name": "铁塔租赁费", "secondName": "", "value": tr_bnfxcb_whf },
-          { "check": false, "name": "油机发电费", "secondName": "", "value": tr_bnfxcb_whf },
-          { "check": false, "name": "电费", "secondName": "", "value": tr_bnfxcb_whf })
-        // console.log(that.weihu)
-        var tr_ndzbkz_qzxgpt = (res.msg.tr_ndzbkz_qzxgpt / 10000).toFixed(2)
-        var tr_ndzbkz_qzjz = (res.msg.tr_ndzbkz_qzjz / 10000).toFixed(2)
-        var tr_ndzbkz_qzhxw = (res.msg.tr_ndzbkz_qzhxw / 10000).toFixed(2)
-        var tr_ndzbkz_qz_ipran = (res.msg.tr_ndzbkz_qz_ipran / 10000).toFixed(2)
-        var tr_ndzbkz_qz_cn = (res.msg.tr_ndzbkz_qz_cn / 10000).toFixed(2)
-        var tr_ndzbkz_qzcs = (res.msg.tr_ndzbkz_qzcs / 10000).toFixed(2)
-        that.niandu.push({ "check": false, "name": "4G相关平台", "secondName": "", "value": tr_ndzbkz_qzxgpt },
-          { "check": false, "name": "4G基站", "secondName": "", "value": tr_ndzbkz_qzjz },
-          { "check": false, "name": "4G核心网", "secondName": "", "value": tr_ndzbkz_qzhxw },
-          // {"check":false,"name":"4G年度资本开支其中4G核心网","secondName":"","value":res.msg.tr_ndzbkz_qzhxw},
-          { "check": false, "name": "IPRan", "secondName": "", "value": tr_ndzbkz_qz_ipran },
-          { "check": false, "name": "CN2", "secondName": "", "value": tr_ndzbkz_qz_cn },
-          { "check": false, "name": "传输", "secondName": "", "value": tr_ndzbkz_qzcs })
-        console.log(tr_ndzbkz_qzcs)
-        that.weihu.sort((a,b)=>{ return b.value-a.value})//升序
-        that.niandu.sort((a,b)=>{ return b.value-a.value})//升序
+        that.binchan.forEach((item,idx)=>{
+          if(item.name='投资合计'){
+            that.binchan[idx].value = res.msg.tr_ndzbkz_tzhj/10000;
+          }else{
+            that.binchan[idx].value = res.msg.tr_bnfxcb_ttzlf_hj/10000;
+          }
+        })
       })
     },
     // 产出
     chanchus() {
       var that = this
-      var svf = []
-      this.$post('/api/index/pieOut', {
+      that.$post('/api/index/pieOut', {
         pageType: "wireless",
         city: "全省",
-        year: "2018",
-        dataType: 'json'
+        year: that.date,
       }).then(function (res) {
-        console.log("pieOut---------------")
-        console.log(res)
-        console.log("pieOut---------------")
-        var yhss = (res.msg.yhs / 10000).toFixed(2)
-        for (var i = 0; i < res.msg.yhsList.length; i++) {
-          that.suur.push((res.msg.yhsList[i] / 10000).toFixed(2))
+        var yhss = (res.msg.yhs / 10000).toFixed(2);
+        var yhs = []
+        for (var i = 0; i < res.msg.yhsList.length; i++) {//用户数
+          yhs.push((res.msg.yhsList[i] / 10000).toFixed(2))
         }
-        that.chans.push({ "arpu": res.msg.arpu, "tzhsq": res.msg.tzhsq, "yhs": yhss })
-        that.arpuLists.push({ "arpuList": res.msg.arpuList }, { "tzhsqList": res.msg.tzhsqList }, { "yearList": that.suur })
-        that.dats.push(res.msg.yearList)
+        that.$set(chans,'arpu', res.msg.arpu)
+        that.$set(chans,'year', res.msg.tzhsq)
+        that.$set(chans,'yhs', yhss)
+        that.chansLists=[]
+        var obj = {
+          arpu: res.msg.arpuList,
+          yhs: yhs,
+          xdata: res.msg.yearList,
+          year: res.msg.tzhsqList
+        }
+        that.chansLists = obj
       })
     },
     back() {
-       this.pietitle = '总投入';
+      this.pietitle = '总投入';
       this.drawPie(this.binchan)
     },
     open() {
@@ -468,32 +436,12 @@ export default {
     },
     drawLine() {
       var category = this.years
-      var dottedBase = [];
       var lineData = this.tzdata;//投入
       var barData = this.srdata;//产出
       var newData = this.tzdata//付现
-      var rateData = JSON.parse(JSON.stringify(this.trccdata));
+      var rateData = this.trccdata;
       var dot = this.trccdata
       var len = rateData.length - 1
-      // rateData[len]='-'  曲线和实线
-      // console.log(dot)
-      // var rateData = []; var dot = []
-      // for (var i = 0; i < 5; i++) {
-      //   var bar = barData[i];
-      //   if (barData[i].value) {
-      //     bar = barData[i].value
-      //   }
-      //   var line = lineData[i]
-      //   if (lineData[i].value) line = lineData[i].value;
-      //   var rate = bar / line;
-      //   if (i == 4) {
-      //     rateData[i] = '-'
-      //   } else {
-      //     rateData[i] = rate.toFixed(2);
-      //   }
-      //   dot[i] = rate.toFixed(2)
-      // }
-      // option
       var option = {
         tooltip: {
           trigger: 'axis',
@@ -512,7 +460,7 @@ export default {
             var str = param[0].name + '<br/>'
             for (var i = 1; i < param.length; i++) {
               if (param[i].seriesName == '投入产出比') {
-                str += param[i].seriesName + ' : ' + param[i].value * 100 + '%' + '<br/>'
+                str += param[i].seriesName + ' : ' + param[i].value + '%' + '<br/>'
               } else {
                 str += param[i].seriesName + ' : ' + param[i].value + '<br/>'
               }
@@ -521,8 +469,7 @@ export default {
           }
         },
         legend: {
-          // data: ['产出', '投入', '收入', '投入产出比',],
-          data: ['资本开支', '付现成本', '收入', '投入产出比',],
+          data: ['资本开支', '付现成本', '收入', '投入产出比'],
           textStyle: {
             color: '#333'
           },
@@ -546,7 +493,7 @@ export default {
           },
         },
         yAxis: [{
-          name:'单位:元',
+          name: '单位:万元',
           splitLine: { show: false },
           axisLine: {
             lineStyle: {
@@ -558,7 +505,7 @@ export default {
           }
         },
         {
-          name:'%',
+          name: '单位:%',
           splitLine: { show: false },
           axisLine: {
             lineStyle: {
@@ -611,7 +558,18 @@ export default {
             data: dot
           },
           {
-            // name: '付现',
+            name: '资本开支',
+            type: 'bar',
+            barWidth: 12,
+            itemStyle: {
+              normal: {
+                barBorderRadius: 5,
+                color: 'rgb(215,215,215)'
+              }
+            },
+            data: lineData
+          },
+          {
             name: '付现成本',
             type: 'bar',
             barWidth: 12,
@@ -630,7 +588,6 @@ export default {
             data: newData
           },
           {
-            // name: '产出',
             name: '收入',
             type: 'bar',
             barWidth: 12,
@@ -647,31 +604,7 @@ export default {
               }
             },
             data: barData
-          },
-          {
-            // name: '投入',
-            name: '资本开支',
-            type: 'bar',
-            barWidth: 12,
-            itemStyle: {
-              normal: {
-                barBorderRadius: 5,
-                color: 'rgb(215,215,215)'
-                // color: new this.$echarts.graphic.LinearGradient(
-                //   0, 0, 0, 1,
-                //   [
-                //     { offset: 0, color: '#F4C309' },
-                //     { offset: 1, color: '#F9E184' }
-                //   ]
-                // )
-              }
-            },
-            data: lineData
-          },
-
-
-
-        ]
+          }]
       };
       var myChart = this.$echarts.init(document.getElementById('bar'));//获取容器元素
       var dom = document.getElementById('bar')
@@ -681,9 +614,7 @@ export default {
       }
       EleResize.on(dom, lestener)
     },
-
-    drawPie1(data) {
-
+    drawPie1(data, y) {
       var option = {
         grid: {
           top: "15%",
@@ -692,22 +623,13 @@ export default {
           right: "6%",
         },
         tooltip: {          trigger: 'axis',
-          //  formatter:function(data) {
-          //         var result = data[0].name + '<br />';
-
-          //         data.forEach(function (item) {
-          //           result += '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:'  + '"></span> ' + item.data=='回本周期'?: + '万<br/>';
-          //         });
-          //         return result;
-
-          //  }
         },
         legend: {
           show: true,
-          data: [name]
+          //data: [name]
         },
         xAxis: {
-          data: this.dats[0],
+          data: this.chansLists.xdata,
           axisLine: {
             show: false, //隐藏X轴轴线
           },
@@ -726,7 +648,7 @@ export default {
         },
         yAxis: [
           {
-            name:'个',
+            name: y,
             show: true,
             type: "value",
             axisLine: {
@@ -817,24 +739,17 @@ export default {
     stop() {
       window.clearInterval(this.timer);
     },
-    secondClick(type) {
-      // console.log("type=============="+type)
-      this.commType = type;
-      // console.log("commType=============="+this.commType)
+    secondClick(type, danwei) {
+      var header = ''
+      if (type == 'yhs') header = '用户数'
+      if (type == 'arpu') header = 'ARPU'
+      if (type == 'year') header = '回本周期'
       this.secondLine = !this.secondLine;
       this.$nextTick(() => {
-        this.Lineheader = ' > ' + type
-        if (type == "用户数") {
-          this.drawPie1(this.arpuLists[2].yearList)
-        }
-        if (type == "arpu") {
-          this.drawPie1(this.arpuLists[0].arpuList)
-        }
-        if (type == "回本周期") {
-          this.drawPie1(this.arpuLists[1].tzhsqList)
-        }
+        this.Lineheader = ' > ' + header;
+        var obj = this.chansLists;
+        this.drawPie1(obj[type], danwei)
         this.stop()
-
       })
 
     },

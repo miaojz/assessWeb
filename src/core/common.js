@@ -467,6 +467,7 @@ class common {
             },
             yAxis: {
                 boundaryGap: true,
+                name:'单位:个',
                 splitLine: {
                     lineStyle: {
                         type: 'dotted',
@@ -586,6 +587,7 @@ class common {
                 },
             },
             yAxis: {
+                name:'单位:个',
                 type: 'value',
                 axisLine: {
                     show: false,
@@ -679,6 +681,7 @@ class common {
                 },
             },
             yAxis: {
+                name:'单位:个',
                 boundaryGap: true,
                 splitLine: {
                     lineStyle: {

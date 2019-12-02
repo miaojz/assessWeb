@@ -19,80 +19,72 @@
 
 <script>
 import Vue from 'vue';
-//import '../assets/js/henan.js';
-//require('../assets/js/henan.js')  //引入china.js地图文件
-//import '../../node_modules/echarts/map/js/province/henan'
-//import "echarts/map/js/china.js";
-//import "echarts/map/js/province/henan.js";
 import "../assets/js/lnglatjson/henan.js";
-//import zhengzhou from "../assets/js/map/zhengzhou/zhengzhou.js";
-//import anyang from "../assets/js/map/anyang/anyang.js";
-
 export default {
   name: 'Left',
   data() {
+    var map = [{ "value": 0, "name": "新乡市" }, { "value": 0, "name": "焦作市" }, { "value": 0, "name": "濮阳市" }, { "value": 0, "name": "许昌市" }, { "value": 0, "name": "漯河市" }, { "value": 0, "name": "三门峡市" }, { "value": 0, "name": "南阳市" }, { "value": 0, "name": "商丘市" }, { "value": 0, "name": "周口市" }, { "value": 0, "name": "信阳市" }, { "value": 0, "name": "驻马店市" }, { "value": 0, "name": "济源市" }, { "value": 0, "name": "郑州市" }, { "value": 0, "name": "开封市" }, { "value": 0, "name": "洛阳市" }, { "value": 0, "name": "平顶山市" }, { "value": 0, "name": "安阳市" }, { "value": 0, "name": "鹤壁市" }]
     return {
       page: this.$route.params.id,
       data: [],
       stop: '',
       quyu: [],
-      data1: []
+      mapdata: map,
+
     }
   },
   created() { },
   mounted() {
-    // this.drawMap()
-    this.maaptop()
+    this.maptop()
     this.ditumap()
-    //获取store。js {{this.$store.state.date}}
-    //console.log(this.$store.state.date)
   },
   watch: {
     $route(to, from) {
-
+      this.drawMap()
+    },
+    mapdata: {
+      deep: true,
+      handler: function (newval, oldval) {
+        this.drawMap()
+      }
+    },
+    date(val) {
+      this.maptop()
+      this.ditumap()
+    }
+  },
+  computed: {
+    date: function () {
+      return this.$store.state.date
     }
   },
   methods: {
-    // 地图左上角数据
-    maaptop() {
-      var that = this
-      this.$post('/api/index/mapTop', {
+    //地图左上角数据
+    maptop() {
+      var that = this;
+      var param = {
         pageType: "wireless",
         city: "全省",
-        // year:"2018",
-        dataType: 'json'
-      }).then(function (res) {
-        //  console.log('jjj')
-        //  console.log(res)
-        //  console.log($data.stop)
-        //  this.stop=res.msg[0].trccb
-        //  console.log(this.data.stop)   
-        // console.log(res.msg[0].trccb)
+        year:that.date
+      }
+      this.$post('/api/index/mapTop', param).then(function (res) {
         that.stop = res.msg[0].trccb
-        //  console.log(that.stop)
       })
     },//地图
     ditumap() {
       var that = this
-      this.$post('/api/index/map', {
+      var param = {
         pageType: "wireless",
-        // city:"全省",
-        year: 2018,
+        year: that.date,
         dataType: 'json'
-      }).then(function (res) {
-        console.log('---------------------')
-        console.log(res)
-        for (var i = 0; i < res.msg.length; i++) {
-          that.quyu.push(res.msg[i])
-          //console.log(that.quyu)
-
-        }
-        that.quyu.map((value, key, arry) => {
-          that.data1.push({ 'name': value.city, 'value': value.trccb })
-
+      }
+      that.$post('/api/index/map', param).then(function (res) {
+        var msg = res.msg, data = []
+        msg.map((item, key, arry) => {
+          data.push({ 'name': item.city, 'value': item.trccb })
         })
-        // console.log(that.data1)
-        that.drawMap()
+        that.mapdata=[]
+        that.mapdata = data
       })
     },
     to(e) {
@@ -104,26 +96,8 @@ export default {
       }
     },
     drawMap() {
-      var data = this.data1
-      // console.log(this.data1)
-      // var data = [{ name: "安阳市", rate: Math.round(1e3 * Math.random()), value: 92 },
-      // { name: "新乡市", rate: Math.round(1e3 * Math.random()), value: 91 },
-      // { name: "濮阳市", rate: Math.round(1e3 * Math.random()), value: 183 },
-      // { name: "焦作市", rate: Math.round(1e3 * Math.random()), value: 155 },
-      // { name: "鹤壁市", rate: Math.round(1e3 * Math.random()), value: 108 },
-      // { name: "三门峡市", rate: Math.round(1e3 * Math.random()), value: 83 },
-      // { name: "信阳市", rate: Math.round(1e3 * Math.random()), value: 98 },
-      // { name: "南阳市", rate: Math.round(1e3 * Math.random()), value: 106 },
-      // { name: "周口市", rate: Math.round(1e3 * Math.random()), value: 158 },
-      // { name: "商丘市", rate: Math.round(1e3 * Math.random()), value: 130 },
-      // { name: "平顶山市", rate: Math.round(1e3 * Math.random()), value: 176 },
-      // { name: "开封市", rate: Math.round(1e3 * Math.random()), value: 102 },
-      // { name: "洛阳市", rate: Math.round(1e3 * Math.random()), value: 122 },
-      // { name: "济源市", rate: Math.round(1e3 * Math.random()), value: 111 },
-      // { name: "漯河市", rate: Math.round(1e3 * Math.random()), value: 153 },
-      // { name: "许昌市", rate: Math.round(1e3 * Math.random()), value: 140 },
-      // { name: "郑州市", rate: Math.round(1e3 * Math.random()), value: 190 },
-      // { name: "驻马店市", rate: Math.round(1e3 * Math.random()), value: 192 }];
+      // var data = [{ "value": 196.72, "name": "新乡市" }, { "value": 572.61, "name": "焦作市" }, { "value": 489.98, "name": "濮阳市" }, { "value": 341.53, "name": "许昌市" }, { "value": 393.22, "name": "漯河市" }, { "value": 274.62, "name": "三门峡市" }, { "value": 231.75, "name": "南阳市" }, { "value": 270.38, "name": "商丘市" }, { "value": 408.19, "name": "周口市" }, { "value": 226.11, "name": "信阳市" }, { "value": 452.13, "name": "驻马店市" }, { "value": 148.8, "name": "济源市" }, { "value": 363.47, "name": "郑州市" }, { "value": 225.48, "name": "开封市" }, { "value": 289.08, "name": "洛阳市" }, { "value": 530.01, "name": "平顶山市" }, { "value": 254.41, "name": "安阳市" }, { "value": 276.3, "name": "鹤壁市" }]
+      var data = this.mapdata;
       var geoCoordMap = { // 地图数据
         "郑州市": [113.43808, 34.619528],
         "安阳市": [114.336098, 36.082031],
@@ -132,43 +106,38 @@ export default {
         "鹤壁市": [114.301029, 35.733213],
         "焦作市": [113.249221, 35.186851],
         "济源市": [112.546961, 35.088732],
-        "三门峡市": [110.816448, 34.47742],//[110.985491,34.610972],
-        "洛阳市": [112.21811, 34.494904],
+        "三门峡市": [110.907399, 34.434786],
+        "洛阳市": [111.988613, 34.350542],
         "南阳市": [112.446926, 32.938165],
-        "平顶山市": [113.078183, 33.805632],
-        "许昌市": [113.874441, 34.12038],
+        "平顶山市": [113.307718, 33.735241],
+        "许昌市": [113.826063, 34.022956],
         "开封市": [114.53157, 34.637588],
         "商丘市": [115.688587, 34.399763],
         "周口市": [114.858122, 33.747057],
-        "漯河市": [114.023344, 33.699014],
+        "漯河市": [114.026405, 33.575855],
         "驻马店市": [114.048353, 32.963372],
-        "信阳市": [114.963906, 32.215873]
+        "信阳市": [114.981269, 31.963486]
       };
       var mapName = '河南';
       // 最大值 4
       var max = Math.max.apply(Math, data.map(item => { return item.value })) + 20
-      console.log(max)
-
-      // 最小值 1
       var min = Math.min.apply(Math, data.map(item => { return item.value })) - 20
-      console.log(min)
-      var maxSize4Pin = 100,
-        minSize4Pin = 20;
-
+      if (min < 0) min = 0
       var convertData = function (data) {
         var res = [];
         for (var i = 0; i < data.length; i++) {
           var geoCoord = geoCoordMap[data[i].name];
-          var rate = Number(data[i].rate).toFixed(2)
           if (geoCoord) {
             res.push({
               name: data[i].name,
-              value: geoCoord.concat(rate).concat(data[i].value),
+              value: geoCoord.concat(data[i].value),
             });
           }
         }
         return res;
       };
+      // 最小值 1
+      var min = Math.min.apply(Math, data.map(item => { return item.value })) - 20
       var option = {
         tooltip: {
           padding: 0,
@@ -184,8 +153,6 @@ export default {
               + '<div style="width:80%;height:40px;line-height:40px;border-bottom:2px solid rgba(7,166,255,0.7);padding:0 20px">' + '<i style="display:inline-block;width:8px;height:8px;background:#16d6ff;border-radius:40px;">' + '</i>'
               + '<span style="margin-left:10px;color:#fff;font-size:16px;">' + params.name + '</span>' + '</div>'
               + '<div style="padding:12px">'
-              // +'<p style="color:#fff;font-size:12px;">'+'<i style="display:inline-block;width:10px;height:10px;background:#16d6ff;border-radius:40px;margin:0 8px">'+'</i>'
-              // +'无线网项目数量：'+'<span style="color:#f48225;margin:0 6px;font-size:14px;">'+data+'</span>'+'个'+'</p>'
               + '<p style="color:#fff;font-size:12px;">' + '<i style="display:inline-block;width:10px;height:10px;background:#16d6ff;border-radius:40px;margin:0 8px">' + '</i>'
               + '投入产出比：' + '<span style="color:#11ee7d;margin:0 6px;font-size:14px;">' + params.data.value + '</span>' + '%' + '</p>'
               + '</div>' + '</div>';
@@ -205,9 +172,6 @@ export default {
           text: ['投入产出比(%)'],
           textGap: 16,
           align: 'left',
-          // inRange: {
-          //     color: ['#ffffff', '#E0DAFF', '#ADBFFF', '#9CB4FF', '#6A9DFF', '#3889FF']
-          // }
           inRange: {
             color: ['#E6FFFF', '#3ab8f2', '#6990D5'] // 蓝绿
           }
@@ -218,10 +182,10 @@ export default {
           label: {
             normal: {
               show: true,
-              // name:'opp',
               textStyle: {
                 color: '#666'
               },
+              formatter: "{b}:{c}"
             },
             emphasis: {
               show: false,
@@ -250,6 +214,7 @@ export default {
             label: {
               normal: {
                 show: true,
+                formatter: "{b}:{c}"
               },
               emphasis: {
                 show: false,
@@ -258,15 +223,6 @@ export default {
                 }
               }
             },
-            //  markPoint: {//图形
-            //         symbolSize: 80,
-            //         label: {
-            //             normal: {
-            //                 show: true,
-            //                 formatter: '{c}%'
-            //             }
-            //         },
-            //  },
             roam: true,
             itemStyle: {
               normal: {
@@ -280,43 +236,42 @@ export default {
             animation: false,
             data: data
 
-
           },
-          // {
-          //     name: '无线网投入产出比',
-          //     type: 'effectScatter',
-          //     coordinateSystem: 'geo',
-          //     data: convertData(data.sort(function(a, b) {
-          //         return b.value - a.value;
-          //     }).slice(0, 10)),
-          //     symbolSize: function(val) {
-          //         return val[2]/60 ;
-          //     },
-          //     showEffectOn: 'render',
-          //     rippleEffect: {
-          //         brushType: 'stroke'
-          //     },
-          //     hoverAnimation: true,
-          //     label: {
-          //         normal: {
-          //             formatter: '{b}',
-          //             position: 'left',
-          //             show: false
-          //         }
-          //     },
-          //     itemStyle: {
-          //         normal: {
-          //             color: '#FF7F50',
-          //             shadowBlur: 10,
-          //             shadowColor: '#FF7F50'
-          //         }
-          //     },
-          //     zlevel: 1
-          // },
+          {
+            name: '无线网投入产出比',
+            type: 'scatter',
+            coordinateSystem: 'geo',
+            data: convertData(data),
+            symbolSize: 1,
+            showEffectOn: 'render',
+            rippleEffect: {
+              brushType: 'stroke'
+            },
+            hoverAnimation: true,
+            label: {
+              normal: {
+                formatter: function (param) {
+                  return param.data.value[2] + '%'
+                },
+                position: 'bottom',
+                show: true,
+                textStyle: {
+                  color: '#333'
+                },
+              }
+            },
+            itemStyle: {
+              normal: {
+                color: '#FF7F50',
+                shadowBlur: 10,
+                shadowColor: '#FF7F50'
+              }
+            },
+            zlevel: 1
+          },
 
         ]
       };
-
       var chart = this.$echarts.init(document.getElementById('map'));//获取容器元素
       window.onresize = chart.resize;
       chart.setOption(option);

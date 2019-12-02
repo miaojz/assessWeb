@@ -23,7 +23,6 @@ import echarts from 'echarts';
 			log('ECharts Map is not loaded');
 			return;
 		}
-		console.log(echarts)
 		echarts.registerMap('安阳', {
 			"type": "FeatureCollection",
 			"features": [

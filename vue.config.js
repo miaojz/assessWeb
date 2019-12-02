@@ -19,10 +19,10 @@ module.exports = {
         proxy: {
           // proxy all requests starting with /api to jsonplaceholder
           '/api': {
-            target: 'http://192.168.0.6:8182/',
+            target: 'http://192.168.0.6:8182/api',
             changeOrigin: true,
             pathRewrite: {
-              '^/api': ''
+              '^/api': '/'
             }
           }
         }

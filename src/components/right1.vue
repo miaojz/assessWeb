@@ -43,7 +43,7 @@
                 <span>{{Lineheader}}</span>
               </span>
             </div>
-             <div class="height" id="div1" v-show='secondLine'>
+            <div class="height" id="div1" v-show="secondLine">
               <div class="oimg" @mouseover="stop" @mouseout="start()" @click="secondClick('回本周期')">
                 <p>0</p>
                 <p>回本周期</p>
@@ -57,7 +57,7 @@
                 <p>用户数(万)</p>
               </div>
             </div>
-            <div class='height' id='pie1' v-show='!secondLine'></div>
+            <div class="height" id="pie1" v-show="!secondLine"></div>
           </el-card>
         </el-col>
       </el-row>
@@ -94,14 +94,14 @@ export default {
       pietitle: '总投入',
       pieheader: '',
       touruNum: [0, 398.35, 1415.83, 1717.08, 1880.87],
-      newNum: [0, 0, 0, 0, { value: 0,
+      newNum: [0, 0, 0, 0, {        value: 0,
         itemStyle: {
           borderType: 'dotted',
           barBorderColor: '#ffdcc3',
           color: '#B49CDB'
         }
       }],
-      chanchu: [0, 0, 0, 0, {value: 0,
+      chanchu: [0, 0, 0, 0, {        value: 0,
         itemStyle: {
           borderType: 'dotted',
           barBorderColor: '#ffdcc3',
@@ -118,36 +118,37 @@ export default {
       }],
       sumNum: 100,
       myPie: null,
-      pieActive:0,
-      secondLine:true,
+      pieActive: 0,
+      secondLine: true,
       da: 120, //图片间隔角度
       a0: 0, //已旋转角度,
-      Lineheader:'',
-      second:''
+      Lineheader: '',
+      second: ''
     }
   },
   created() { },
   mounted() {
-     //旋转运动
-     if (!this.$store.state.city) this.city = localStorage.getItem('city')
-     console.log(this.city)
+    //旋转运动
+    if (!this.$store.state.city) this.city = localStorage.getItem('city')
+    console.log(this.city)
     this.$nextTick(() => {
       this.chart = this.$echarts.init(document.getElementById('pie'));//获取容器元素
       if (this.$route.path == '/index' || this.$route.path == '/index/投资收益评估概览') {
         this.com_name = 'eDialog';
         this.page = '';
+        this.piedata = pieData.sumdata
       } else if (this.$route.path == '/index/无线网概览') {
         this.piedata = pieData.network
         this.com_name = 'eDialogschool'
-      } else if(this.$route.path=='/index/governmentSchool'){
+      } else if (this.$route.path == '/index/governmentSchool') {
         this.com_name = 'eDialogschool'
         this.piedata = pieData.governmentSchoolSum[this.city]
-      }else{
-        this.com_name = 'eDialogschool'
+      } else {
+        this.com_name = 'eDialogschool';
+        this.piedata = pieData.sumdata
       }
       this.drawLine()
       this.drawPie(this.piedata)
-      this.clickPie()
       this.title = this.page
       this.start()
     })
@@ -158,18 +159,19 @@ export default {
       if (this.$route.path == '/index' || this.$route.path == '/index/投资收益评估概览') {
         this.com_name = 'eDialog';
         this.page = '';
+        this.piedata = pieData.sumdata
       } else if (this.$route.path == '/index/无线网概览') {
         this.piedata = pieData.network
         this.com_name = 'eDialogschool'
-      } else if(this.$route.path=='/index/governmentSchool'){
+      } else if (this.$route.path == '/index/governmentSchool') {
         this.com_name = 'eDialogschool'
         this.piedata = pieData.governmentSchoolSum[this.city]
-      }else{
-        this.com_name = 'eDialogschool'
+      } else {
+        this.com_name = 'eDialogschool';
+        this.piedata = pieData.sumdata
       }
       this.title = this.page
       this.drawPie(this.piedata)
-      this.clickPie()
     },
     piedata: {
       deep: true,
@@ -181,34 +183,34 @@ export default {
         }
       }
     },
-     city: {
+    city: {
       deep: true,
       handler: function (newval, oldval) {
         var data
-       if(this.pieheader){
-          var second=this.second;
-          data=pieData[second][newval]
-       }else{
-         data=pieData.governmentSchoolSum[newval]
-       }
-          this.drawPie(data)
+        if (this.pieheader) {
+          var second = this.second;
+          data = pieData[second][newval]
+        } else {
+          data = pieData.governmentSchoolSum[newval]
+        }
+        this.drawPie(data)
       }
     }
   },
   computed: {
-      city () {
-        var city=this.$store.state.city
-        if (!this.$store.state.city) city = localStorage.getItem('city')
-        return city;　　//需要监听的数据
-      }
-},
+    city() {
+      var city = this.$store.state.city
+      if (!this.$store.state.city) city = localStorage.getItem('city')
+      return city;　　//需要监听的数据
+    }
+  },
   methods: {
     back() {
       if (this.$route.path == '/index/无线网概览') {
         this.piedata = pieData.network
-      } else if(this.$route.path == '/index/governmentSchool'){
+      } else if (this.$route.path == '/index/governmentSchool') {
         this.piedata = pieData.governmentSchoolSum[this.city]
-      }else{
+      } else {
         this.piedata = pieData.sumdata
       }
       this.pietitle = '总投入',
@@ -362,6 +364,7 @@ export default {
         ]
       };
       that.chart.setOption(option);
+      that.clickPie()
       var dom = document.getElementById('pie');
       let lestener = function () {
         that.chart.resize()
@@ -375,9 +378,14 @@ export default {
         if (param.data.check) {
           that.pieheader = ' > ' + name
           var second = param.data.secondName
-          this.second=second;
-          that.piedata = pieData[second][that.city];
-           that.drawPie(that.piedata)
+          this.second = second;
+          if (this.$route.path == '/index/governmentSchool') {
+            that.piedata = pieData[second][that.city];
+          } else {
+            that.piedata = pieData[second]
+
+          }
+          that.drawPie(that.piedata)
         } else {
           that.$message.error('已经到最底层了');
         }
@@ -457,7 +465,7 @@ export default {
           },
         },
         yAxis: [{
-          name:'单位:万元',
+          name: '单位:万元',
           splitLine: { show: false },
           axisLine: {
             lineStyle: {
@@ -469,7 +477,7 @@ export default {
           }
         },
         {
-          name:'单位:%',
+          name: '单位:%',
           splitLine: { show: false },
           axisLine: {
             lineStyle: {
@@ -590,11 +598,11 @@ export default {
           left: "10%",
           right: "6%",
         },
-        tooltip:{ trigger: 'axis',},
-        legend:{
-            show:true,
-            data:[name]
-          },
+        tooltip: { trigger: 'axis', },
+        legend: {
+          show: true,
+          data: [name]
+        },
         xAxis: {
           data: [
             "2015",
@@ -617,18 +625,18 @@ export default {
               fontSize: "12",
             },
           },
-          boundaryGap:0
+          boundaryGap: 0
         },
         yAxis: [
           {
-            name:'个',
+            name: '个',
             show: true,
             type: "value",
             axisLine: {
               show: false, //隐藏轴线
             },
-            splitLine:{
-               show: false, //隐藏轴线
+            splitLine: {
+              show: false, //隐藏轴线
             },
             axisTick: {
               show: false, //隐藏轴刻度
@@ -658,8 +666,8 @@ export default {
               color: "#4c8bfd",
               width: 2,
               shadowColor: 'rgba(76,139,253, 0.3)',
-                shadowBlur: 10,
-                shadowOffsetY: 10
+              shadowBlur: 10,
+              shadowOffsetY: 10
             },
             areaStyle: {
               color: new this.$echarts.graphic.LinearGradient(0, 0, 0, 1, [
@@ -679,7 +687,7 @@ export default {
         ],
       }
       this.myPie = this.$echarts.init(document.getElementById('pie1'));//获取容器元素
-      this.myPie.setOption(option,true);
+      this.myPie.setOption(option, true);
       var dom = document.getElementById('pie1')
       var that = this;
       let lestener = function () {
@@ -694,7 +702,7 @@ export default {
     posimgs1() {
       var da = this.da, a0 = this.a0;
       var centerx = 100, centery = 68, r = 68;
-      for (var i = 0; i <  $('.oimg').length; i++) {
+      for (var i = 0; i < $('.oimg').length; i++) {
         $('.oimg')[i].style.left = centerx + r * Math.cos((da * i + a0) / 180 * Math.PI) + "px";
         $('.oimg')[i].style.top = centery + r * Math.sin((da * i + a0) / 180 * Math.PI) + "px";
       }
@@ -705,30 +713,30 @@ export default {
         that.posimgs1();
         that.a0++
       }, 200);
-      that.timer=timer
-      that.$once('hook:beforeDestroy', () => {            
-          clearInterval(timer);                                    
+      that.timer = timer
+      that.$once('hook:beforeDestroy', () => {
+        clearInterval(timer);
       })
     },
     stop() {
       window.clearInterval(this.timer);
     },
-    secondClick(type){
-      this.secondLine=!this.secondLine;
+    secondClick(type) {
+      this.secondLine = !this.secondLine;
       this.$nextTick(() => {
         this.drawPie1(type)
         this.stop()
         console.log(type)
-        this.Lineheader=' > '+type
+        this.Lineheader = ' > ' + type
       })
-      
+
     },
-    backLine(){
-      this.secondLine=true;
+    backLine() {
+      this.secondLine = true;
       this.$nextTick(() => {
-          this.start()
-          this.Lineheader=''
-        })
+        this.start()
+        this.Lineheader = ''
+      })
     }
   }
 }
@@ -772,7 +780,7 @@ export default {
   > div {
     cursor: pointer;
   }
-  >div >p{
+  > div > p {
     color: #7c89a0;
   }
   > div > p:nth-child(1) {
@@ -783,9 +791,9 @@ export default {
     font-size: 16px;
     font-weight: bold;
   }
-  >div.active >p {
+  > div.active > p {
     color: #559ae7;
-     font-weight: bold;
+    font-weight: bold;
   }
   .contLine {
     width: 2px;
@@ -824,7 +832,7 @@ export default {
     background-size: 100% 100%;
   }
 }
-.cardHead span{
+.cardHead span {
   cursor: pointer;
 }
 </style>

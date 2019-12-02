@@ -1,12 +1,25 @@
 import axios from "axios";
 import VueCookies from 'vue-cookies';
 import { showLoading, hideLoading } from './loading';
+//var base='http://192.168.0.6:8182'
+// let baseUrl = "";   //这里是一个默认的url，可以没有
+// switch (process.env.NODE_ENV) {
+//     case 'test':
+//         baseUrl = ""  //测试服务器的请求url
+//         break
+//     case 'production':
+//         baseUrl = "http://192.168.0.6:8182/"   //生产环境url
+//         break
+//     default:
+//         baseUrl = '/api'   //'/api'为vue.config.js配置
+// }
+// console.log(baseUrl)
 axios.create({
     baseURL: process.env.VUE_APP_BASE_API,
     headers: {
         'Content-Type': 'application/json; charset=UTF-8'
         // 'Authorization': 'JWT ' + localStorage.token
-    }
+    },
 });
 
 

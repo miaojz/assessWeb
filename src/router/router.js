@@ -18,6 +18,7 @@ export default new Router({
         {
         path: '/',
         redirect: '/index',
+        name:''
     },
     {
         path: '/index',
@@ -31,7 +32,8 @@ export default new Router({
         children: [
             {
                 path: '',
-                component: () => import('../views/index.vue'),
+                component: () => import('../views/other.vue'),
+                name:''
             },
             {
                 path: '无线网概览',
@@ -46,17 +48,17 @@ export default new Router({
             {
                 path: '宏站',
                 name: '宏站',
-                component: () => import('../views/index.vue'),
+                component: () => import('../views/other.vue'),
             },
             {
                 path: '政企概览',
                 name: '政企概览',
-                component: () => import('../views/index.vue'),
+                component: () => import('../views/other.vue'),
             },
             {
                 path: '专线',
                 name: '专线',
-                component: () => import('../views/index.vue'),
+                component: () => import('../views/other.vue'),
             },
             {
                 path: 'governmentSchool',
@@ -66,17 +68,17 @@ export default new Router({
             {
                 path: 'DICT',
                 name: 'DICT',
-                component: () => import('../views/index.vue'),
+                component: () => import('../views/other.vue'),
             },
             {
                 path: '接入网概览',
                 name: '接入网概览',
-                component: () => import('../views/index.vue'),
+                component: () => import('../views/other.vue'),
             },
             {
                 path: '家庭宽带',
                 name: '家庭宽带',
-                component: () => import('../views/index.vue'),
+                component: () => import('../views/other.vue'),
             },
             {
                 path: 'school/:id',

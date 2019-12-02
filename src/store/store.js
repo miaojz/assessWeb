@@ -7,7 +7,7 @@ import createPersiste from 'vue-savedata'
 Vue.use(Vuex);
 export default new Vuex.Store({
     state:{
-        date:'2019',
+        date:'2018',
         breadcrumbData:[],
         city:'河南',
         schoolData: JSON.stringify({
