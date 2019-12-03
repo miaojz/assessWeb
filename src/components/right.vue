@@ -233,9 +233,9 @@ export default {
         for (var i = 0; i < res.msg.yhsList.length; i++) {//用户数
           yhs.push((res.msg.yhsList[i] / 10000).toFixed(2))
         }
-        that.$set(chans,'arpu', res.msg.arpu)
-        that.$set(chans,'year', res.msg.tzhsq)
-        that.$set(chans,'yhs', yhss)
+        that.$set(that.chans,'arpu', res.msg.arpu)
+        that.$set(that.chans,'year', res.msg.tzhsq)
+        that.$set(that.chans,'yhs', yhss)
         that.chansLists=[]
         var obj = {
           arpu: res.msg.arpuList,
@@ -273,11 +273,10 @@ export default {
       // console.log(piedata)
       var colorList = ['#6990D5', '#FF7F50', '#3feed4', '#00d488', '#afa3f5', '#f1bb4c', "#6A9DFF", '#ffc257', 'rgba(5, 65, 110, 1)', '#3bafff', '#ffedcc', '#fd6f97', '#fed4e0', '#a181fc', '#115dab', '#e3d9fe'];
       var option = {
-
         title: {
           subtext: that.pietitle,
-          x: '38%',
-          y: '42%',
+          x: 'center',
+          y: '40%',
           textStyle: {
             fontSize: 30,
             fontWeight: 'normal',
@@ -614,7 +613,7 @@ export default {
       }
       EleResize.on(dom, lestener)
     },
-    drawPie1(data, y) {
+    drawPie1(data, dw,name) {
       var option = {
         grid: {
           top: "15%",
@@ -626,7 +625,7 @@ export default {
         },
         legend: {
           show: true,
-          //data: [name]
+          data: [name]
         },
         xAxis: {
           data: this.chansLists.xdata,
@@ -648,7 +647,7 @@ export default {
         },
         yAxis: [
           {
-            name: y,
+            name: dw,
             show: true,
             type: "value",
             axisLine: {
@@ -748,7 +747,7 @@ export default {
       this.$nextTick(() => {
         this.Lineheader = ' > ' + header;
         var obj = this.chansLists;
-        this.drawPie1(obj[type], danwei)
+        this.drawPie1(obj[type], danwei,header)
         this.stop()
       })
 
