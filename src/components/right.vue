@@ -212,7 +212,7 @@ export default {
         year: that.date,
       }).then(function (res) {
         that.binchan.forEach((item,idx)=>{
-          if(item.name='投资合计'){
+          if(item.name=='投资合计'){
             that.binchan[idx].value = res.msg.tr_ndzbkz_tzhj/10000;
           }else{
             that.binchan[idx].value = res.msg.tr_bnfxcb_ttzlf_hj/10000;

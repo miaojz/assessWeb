@@ -136,8 +136,6 @@ export default {
         }
         return res;
       };
-      // 最小值 1
-      var min = Math.min.apply(Math, data.map(item => { return item.value })) - 20
       var option = {
         tooltip: {
           padding: 0,
