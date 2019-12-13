@@ -211,7 +211,7 @@ export default {
 <style lang="less" scoped>
 .contain {
   width: 99%;
-  height: 91%;
+  height: calc(100% - 66px);
   margin: 0 10px;
   box-sizing: border-box;
   .el-row {

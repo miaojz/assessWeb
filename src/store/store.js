@@ -99,6 +99,9 @@ export default new Vuex.Store({
     modules: {
         mutations,
     },
+    getters:{
+        date: state => state.date,
+    },
     actions: actions,
     mutations: {
         changeDate (state,date) {

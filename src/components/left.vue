@@ -55,7 +55,7 @@ export default {
   },
   computed: {
     date: function () {
-      return this.$store.state.date
+      return this.$store.getters.date
     }
   },
   methods: {
@@ -96,7 +96,6 @@ export default {
       }
     },
     drawMap() {
-      // var data = [{ "value": 196.72, "name": "新乡市" }, { "value": 572.61, "name": "焦作市" }, { "value": 489.98, "name": "濮阳市" }, { "value": 341.53, "name": "许昌市" }, { "value": 393.22, "name": "漯河市" }, { "value": 274.62, "name": "三门峡市" }, { "value": 231.75, "name": "南阳市" }, { "value": 270.38, "name": "商丘市" }, { "value": 408.19, "name": "周口市" }, { "value": 226.11, "name": "信阳市" }, { "value": 452.13, "name": "驻马店市" }, { "value": 148.8, "name": "济源市" }, { "value": 363.47, "name": "郑州市" }, { "value": 225.48, "name": "开封市" }, { "value": 289.08, "name": "洛阳市" }, { "value": 530.01, "name": "平顶山市" }, { "value": 254.41, "name": "安阳市" }, { "value": 276.3, "name": "鹤壁市" }]
       var data = this.mapdata;
       var geoCoordMap = { // 地图数据
         "郑州市": [113.43808, 34.619528],
@@ -274,7 +273,6 @@ export default {
       window.onresize = chart.resize;
       chart.setOption(option);
     }
-
   }
 }
 </script>
@@ -291,9 +289,7 @@ export default {
 .box-card,
 #map {
   width: 100%;
-  height: 99%;
-}
-#map {
+  height: 100%;
   position: relative;
 }
 .box-card {

@@ -170,7 +170,7 @@ export default {
   },
   computed: {
     date: function () {
-      return this.$store.state.date
+      return this.$store.getters.date
     }
   },
   methods: {
@@ -784,7 +784,7 @@ export default {
 }
 .rightBottom {
   width: 100%;
-  height: 48%;
+  height: calc(52% - 22px);
 }
 .elSelect {
   float: right;

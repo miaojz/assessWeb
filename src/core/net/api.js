@@ -29,7 +29,7 @@ axios.interceptors.request.use((req) => {
   return req;
 }, err => Promise.reject(err));
 
-
+console.log(process.env)
 // 在实例已创建后修改默认值
 //axios.defaults.headers.common['Authorization'] = AUTH_TOKEN;
 const post = (url, params) => {

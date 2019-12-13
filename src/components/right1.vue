@@ -761,7 +761,7 @@ export default {
 }
 .rightBottom {
   width: 100%;
-  height: 48%;
+  height: calc(52% - 22px);
 }
 .elSelect {
   float: right;
